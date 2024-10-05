@@ -14,7 +14,7 @@ public UserClass(String username, char[] password, boolean isOTP,
         String firstName, String middleName, String lastName){
 	this.username = username;
 	this.password = password;
-	this.isOTP = isOTP;
+	this.isOTP = true;
 	this.firstName = firstName;
 	this.middleName = middleName;
 	this.lastName = lastName;
