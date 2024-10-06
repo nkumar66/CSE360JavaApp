@@ -51,7 +51,7 @@ public class PasswordEvaluationGUITestbed extends Application {
 		
 		Pane theRoot = new Pane();							// Create a pane within the window
 		
-		theGUI = new UserInterface(theRoot);				// Create the Graphical User Interface
+		theGUI = new UserInterface(theRoot, theStage);				// Create the Graphical User Interface
 		
 		Scene theScene = new Scene(theRoot, WINDOW_WIDTH, WINDOW_HEIGHT);	// Create the scene
 		

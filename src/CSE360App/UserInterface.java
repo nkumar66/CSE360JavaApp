@@ -3,9 +3,13 @@ package CSE360App;
 
 // JavaFX imports needed to support the Graphical User Interface
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
@@ -55,7 +59,10 @@ public class UserInterface {
     private Label label_NumericDigit = new Label("At least one numeric digit");
     private Label label_SpecialChar = new Label("At least one special character");
     private Label label_LongEnough = new Label("At least eight characters");
-	
+    
+    //Login Button: Actual button itself and an error message if password is not structured correctly
+	private Button loginButton = new Button("login");
+	private Label errorMessage = new Label("");
 	/**********************************************************************************************
 
 	Constructors
@@ -66,7 +73,7 @@ public class UserInterface {
 	 * This method initializes all of the elements of the graphical user interface. These assignments
 	 * determine the location, size, font, color, and change and event handlers for each GUI object.
 	 */
-	public UserInterface(Pane theRoot) {
+	public UserInterface(Pane theRoot,Stage primaryStage) {
 		
 		// Label theScene with the name of the testbed, centered at the top of the pane
 		setupLabelUI(label_ApplicationTitle, "Arial", 24, PasswordEvaluationGUITestbed.WINDOW_WIDTH, 
@@ -154,11 +161,45 @@ public class UserInterface {
 		setupLabelUI(validPassword, "Arial", 18,  
 						PasswordEvaluationGUITestbed.WINDOW_WIDTH-150-10, Pos.BASELINE_LEFT, 10, 380);				
 
+		
+		//login button that sets new scene if credentials are valid
+		loginButton.setLayoutX(10);
+		loginButton.setLayoutY(180);
+		loginButton.setOnAction(e -> {
+			if (performEvaluation()) {  // Only switch scene if password is valid
+				login(primaryStage);
+			} else {
+				errorMessage.setText("Password requirements not met!");
+			}
+		});
+		
+		
+		// Error message that displays if user attempts to login w/ invalid password
+		errorMessage.setTextFill(Color.RED);
+		errorMessage.setLayoutX(10);
+		errorMessage.setLayoutY(250);
+		
 		// Place all of the just-initialized GUI elements into the pane, whether they have text or not
 		theRoot.getChildren().addAll(label_ApplicationTitle, label_Username, text_UserName, label_Password, text_Password, 
 				noInputFound, label_errPassword, errPassword, errPasswordPart3, validPassword,
 				label_Requirements, label_UpperCase, label_LowerCase, label_NumericDigit,
-				label_SpecialChar, label_LongEnough);
+				label_SpecialChar, label_LongEnough, loginButton);
+		
+
+	}
+	
+	/**********
+	 * Private local method to handle login, and switching to new stage / scene.
+	 */
+	private void login(Stage primaryStage) {
+		StackPane loggedInRoot = new StackPane();
+		Label welcomeLabel = new Label("Welcome! You are logged in!");
+		loggedInRoot.getChildren().add(welcomeLabel);
+		
+		Scene loggedInScene = new Scene(loggedInRoot, 800, 500);
+		primaryStage.setScene(loggedInScene);
+		primaryStage.setTitle("Logged In");
+		primaryStage.show();
 	}
 	
 	/**********
@@ -204,69 +245,70 @@ public class UserInterface {
 		performEvaluation();			// Perform the evaluation to set all the assessment flags
 	}
 	
-	private void setUsername() {
-		
-	}
+
 	
 	/**********
 	 * Evaluate the input whenever the user changes it and update the GUI and the console so the
 	 * user knows what is going on
+	 * @return valid or invalid
 	 */
-	private void performEvaluation() {
-		// Get the user input string from the GUI
-		String inputText = text_Password.getText();
-//		String inputUser = text_UserName.getText();
-		// If the input is empty, set that flag and stop
-		if (inputText.isEmpty())
-		    noInputFound.setText("No input text found!");
-		else
-		{
-			// There is input to process.  Call the evaluatePassword method to assess each of the
-			// remaining criteria 
-			String errMessage = PasswordEvaluator.evaluatePassword(inputText);
-			updateFlags();				// Check for each criteria and set the GUI for that element
-										// to green with the criteria satisfied
-			if (errMessage != "") {
-				// If the returned string from evaluatePassword is not empty, there is an errors!
-				System.out.println(errMessage);		// Display the error message on the console
-				
-				// Insert the error message into the GUI field so it is displayed there
-				label_errPassword.setText(PasswordEvaluator.passwordErrorMessage);
-				
-				// Fetch the location of the error from the PasswordEvaluator.  If the returned
-				// value is negative, we do not display at up arrow beneath the character that
-				// caused the error
-				if (PasswordEvaluator.passwordIndexofError <= -1) return;
-				
-				// Create a copy of the string up to the point of the error and add a special
-				// up arrow character at the point of the error
-				String input = PasswordEvaluator.passwordInput;		// The input
-				errPasswordPart1.setText(input.substring(0, 		// Copy it up to the error
-						PasswordEvaluator.passwordIndexofError));
-				errPasswordPart2.setText("\u21EB");					// Append the up arrow
-				validPassword.setTextFill(Color.RED);				// Set the characters to red
-				
-				// Append descriptive lines after the indication of the position of the error
-				errPasswordPart3.setText("The red arrow points at the character causing the error!");
-				validPassword.setText("Failure! The password is not valid.");
-			}
-			// If no error message was found, check to see if all the criteria has been met
-			else if (PasswordEvaluator.foundUpperCase && PasswordEvaluator.foundLowerCase &&
-					PasswordEvaluator.foundNumericDigit && PasswordEvaluator.foundSpecialChar &&
-					PasswordEvaluator.foundLongEnough) {
-				// All the criteria has been met.  display the success message to the console
-				System.out.println("Success! The password satisfies the requirements.");
-				
-				// Display the success message and make it green on the GUI
-				validPassword.setTextFill(Color.GREEN);
-				validPassword.setText("Success! The password satisfies the requirements.");
-			} else {
-				// At least one criterion has not been satisfied.  Display an appropriate message
-				// in red on the console
-				validPassword.setTextFill(Color.RED);
-				validPassword.setText("The password as currently entered is not yet valid.");
-			}
-		}
+	private boolean performEvaluation() {
+	    // Get the user input string from the GUI
+	    String inputText = text_Password.getText();
+	    
+	    // If the input is empty, set that flag and stop
+	    if (inputText.isEmpty()) {
+	        noInputFound.setText("No input text found!");
+	        return false;  // Return false if there's no input
+	    } else {
+	        // There is input to process. Call the evaluatePassword method to assess each of the
+	        // remaining criteria 
+	        String errMessage = PasswordEvaluator.evaluatePassword(inputText);
+	        updateFlags();  // Check for each criterion and set the GUI for that element to green
+	        
+	        if (!errMessage.isEmpty()) {
+	            // If the returned string from evaluatePassword is not empty, there are errors
+	            System.out.println(errMessage);  // Display the error message on the console
+	            
+	            // Insert the error message into the GUI field so it is displayed there
+	            label_errPassword.setText(PasswordEvaluator.passwordErrorMessage);
+	            
+	            // Fetch the location of the error from the PasswordEvaluator. If the returned
+	            // value is negative, we do not display an up arrow beneath the character that
+	            // caused the error
+	            if (PasswordEvaluator.passwordIndexofError <= -1) return false;  // Return false if an error occurred
+	            
+	            // Create a copy of the string up to the point of the error and add a special
+	            // up arrow character at the point of the error
+	            String input = PasswordEvaluator.passwordInput;  // The input
+	            errPasswordPart1.setText(input.substring(0, PasswordEvaluator.passwordIndexofError));  // Copy it up to the error
+	            errPasswordPart2.setText("\u21EB");  // Append the up arrow
+	            validPassword.setTextFill(Color.RED);  // Set the characters to red
+	            
+	            // Append descriptive lines after the indication of the position of the error
+	            errPasswordPart3.setText("The red arrow points at the character causing the error!");
+	            validPassword.setText("Failure! The password is not valid.");
+	            return false;  // Return false if password is invalid
+	        }
+	        
+	        // If no error message was found, check to see if all the criteria has been met
+	        else if (PasswordEvaluator.foundUpperCase && PasswordEvaluator.foundLowerCase &&
+	                 PasswordEvaluator.foundNumericDigit && PasswordEvaluator.foundSpecialChar &&
+	                 PasswordEvaluator.foundLongEnough) {
+	            // All the criteria have been met. Display the success message to the console
+	            System.out.println("Success! The password satisfies the requirements.");
+	            
+	            // Display the success message and make it green on the GUI
+	            validPassword.setTextFill(Color.GREEN);
+	            validPassword.setText("Success! The password satisfies the requirements.");
+	            return true;  // Return true if the password is valid
+	        } else {
+	            // At least one criterion has not been satisfied. Display an appropriate message in red on the console
+	            validPassword.setTextFill(Color.RED);
+	            validPassword.setText("The password as currently entered is not yet valid.");
+	            return false;  // Return false if password is invalid
+	        }
+	    }
 	}
 	
 	/**********
