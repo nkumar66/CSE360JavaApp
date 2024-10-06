@@ -29,7 +29,8 @@ public class PasswordEvaluationTestingAutomation {
 		System.out.println("______________");
 		System.out.println("\nFinite state machine execution trace:");
 		
-		String resultText= PasswordEvaluator.evaluatePassword(inputText);
+		char[] passwordCharArr = inputText.toCharArray();
+		String resultText= PasswordEvaluator.evaluatePassword(passwordCharArr);
 		
 		System.out.println();
 		

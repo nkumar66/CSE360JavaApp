@@ -6,31 +6,30 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
 
 /**
- * <p> UserInterface Class </p>
+ * <p> SignUp Class </p>
  * 
- * <p> Description: The Java/FX-based user interface testbed to develop and test UI ideas.</p>
+ * <p> Description: The Java/FX-based user interface testbed to develop and test UI ideas for the user sign up page.</p>
+ * <p> This GUI is activated when a user inputs a first-time Invite Code, allows them to set up their account
  * 
- * <p> Copyright: Lynn Robert Carter © 2024 </p>
+
  * 
- * @author Lynn Robert Carter
- * 
- * @version 1.00		2022-02-21 The JavaFX-based GUI for the implementation of a testbed
- * @version 2.00		2024-09-22 Updated for use at ASU
  *  
  */
 
-public class UserInterface {
+public class SignUpInterface {
 	
 	/**********************************************************************************************
 
@@ -43,11 +42,21 @@ public class UserInterface {
 	private Label label_ApplicationTitle = new Label("CSE 360 App");
 	private Label label_Password = new Label("Enter the password here");
 	private Label label_Username = new Label("Enter username here");
+	private Label label_Email = new Label("Enter email address here");
+	
+	//Profficiency Level Labels
+	private Label label_profficiencyChecker = new Label("Please select your Proficiency Level for each of the following: ");
+	private Label label_javaFX = new Label("JavaFX");
+	
+	// Textfield's for user input
 	private TextField text_UserName = new TextField();
-	private TextField text_Password = new TextField();
+	private TextField text_Password = new PasswordField();
+	private TextField text_Email = new TextField();
+	private TextFlow errPassword;
+	
+	// Prof. Carter's password validation stuff
 	private Label label_errPassword = new Label("");	
     private Label noInputFound = new Label("");
-	private TextFlow errPassword;
     private Text errPasswordPart1 = new Text();		// The error message is composed of three parts
     private Text errPasswordPart2 = new Text();
     private Label errPasswordPart3 = new Label("");
@@ -61,7 +70,7 @@ public class UserInterface {
     private Label label_LongEnough = new Label("At least eight characters");
     
     //Login Button: Actual button itself and an error message if password is not structured correctly
-	private Button loginButton = new Button("login");
+	private Button SignUpButton = new Button("Sign Up");
 	private Label errorMessage = new Label("");
 	/**********************************************************************************************
 
@@ -73,29 +82,43 @@ public class UserInterface {
 	 * This method initializes all of the elements of the graphical user interface. These assignments
 	 * determine the location, size, font, color, and change and event handlers for each GUI object.
 	 */
-	public UserInterface(Pane theRoot,Stage primaryStage) {
+	public SignUpInterface(Stage primaryStage) {
 		
-		// Label theScene with the name of the testbed, centered at the top of the pane
-		setupLabelUI(label_ApplicationTitle, "Arial", 24, PasswordEvaluationGUITestbed.WINDOW_WIDTH, 
-				Pos.CENTER, 0, 10);
 		
-		setupLabelUI(label_Username, "Arial", 14, PasswordEvaluationGUITestbed.WINDOW_WIDTH-10,
-				Pos.BASELINE_LEFT, 10,50);
+		//Used Vbox for easy centering
+		VBox layout = new VBox(10);
+		layout.setAlignment(Pos.CENTER);
 		
-		// Label the password input field with a title just above it, left aligned
-		setupLabelUI(label_Password, "Arial", 14, PasswordEvaluationGUITestbed.WINDOW_WIDTH-10, 
-				Pos.BASELINE_LEFT, 5, 130);
+		// Sets the styling for every label.
+		label_ApplicationTitle.setFont(Font.font("Arial", 24));
+		label_Username.setFont(Font.font("Arial", 14));
+		label_Password.setFont(Font.font("Arial", 14));
+		label_Email.setFont(Font.font("Arial", 14));
+		label_javaFX.setFont(Font.font("Arial", 14));
+		label_profficiencyChecker.setFont(Font.font("Arial", 14));
 		
-		// Establish the text input operand field and when anything changes in the password,
-		// the code will process the entire input to ensure that it is valid or in error.
-		setupTextUI(text_Password, "Arial", 18, PasswordEvaluationGUITestbed.WINDOW_WIDTH-20,
-				Pos.BASELINE_LEFT, 10, 150, true);
-		text_Password.textProperty().addListener((observable, oldValue, newValue) 
-				-> {setPassword(); });
+
+		// Setup any text prompts and listeners here
+		// Password Listener: Used for password requirements
+		text_UserName.setPromptText("Username");
+		text_Password.setPromptText("Password");
+		text_Password.textProperty().addListener((observable, oldValue, newValue) -> {
+		    performEvaluation();
+		});
+		text_Email.setPromptText("Email Addresss");
 		
-	    // Set up the TextField for Username input
-	    setupTextUI(text_UserName, "Arial", 18, PasswordEvaluationGUITestbed.WINDOW_WIDTH-20,
-	            Pos.BASELINE_LEFT, 10, 70, true);
+		//Setup Profficency Level Check boxes  here
+		ToggleGroup javaFxProficiencyGroup = new ToggleGroup();
+		RadioButton beginner = new RadioButton("Beginner");
+		RadioButton intermediate = new RadioButton("intermediate");
+		RadioButton advanced = new RadioButton("Advanced");
+		RadioButton expert = new RadioButton("Expert");
+		
+		beginner.setToggleGroup(javaFxProficiencyGroup);
+		intermediate.setToggleGroup(javaFxProficiencyGroup);
+		advanced.setToggleGroup(javaFxProficiencyGroup);
+		expert.setToggleGroup(javaFxProficiencyGroup);
+		
 	    
 		// Establish an error message for the case where there is no input
 		noInputFound.setTextFill(Color.RED);
@@ -119,39 +142,39 @@ public class UserInterface {
 		errPassword.setLayoutX(22);  
 		errPassword.setLayoutY(100);
 		
-		setupLabelUI(errPasswordPart3, "Arial", 14, 200, Pos.BASELINE_LEFT, 20, 125);	
+		setupLabelUI(errPasswordPart3, "Arial", 14, 400, Pos.BASELINE_LEFT, 20, 125);	
 
 		
 		// Position the requirements assessment display for each required aspect
 		
 		// The requirements title
 	    setupLabelUI(label_Requirements, "Arial", 16, PasswordEvaluationGUITestbed.WINDOW_WIDTH-10, 
-				Pos.BASELINE_LEFT, 10, 200);
+				Pos.BASELINE_LEFT, 10, 400);
 	    
 	    // Upper case character found or not found
 	    setupLabelUI(label_UpperCase, "Arial", 14, PasswordEvaluationGUITestbed.WINDOW_WIDTH-10, 
-				Pos.BASELINE_LEFT, 30, 230);
+				Pos.BASELINE_LEFT, 30, 460);
 	    label_UpperCase.setTextFill(Color.RED);
 	    	    label_LowerCase.setText("At least one lower case letter");
 
 	    // Lower case character found or not found
 	    setupLabelUI(label_LowerCase, "Arial", 14, PasswordEvaluationGUITestbed.WINDOW_WIDTH-10, 
-				Pos.BASELINE_LEFT, 30, 260);
+				Pos.BASELINE_LEFT, 30, 520);
 	    label_LowerCase.setTextFill(Color.RED);
 	    
 	    // Numeric character found or not found
 	    setupLabelUI(label_NumericDigit, "Arial", 14, PasswordEvaluationGUITestbed.WINDOW_WIDTH-10, 
-				Pos.BASELINE_LEFT, 30, 290);
+				Pos.BASELINE_LEFT, 30, 580);
 	    label_NumericDigit.setTextFill(Color.RED);
 	   	    
 	    // Special character found or not found
 	    setupLabelUI(label_SpecialChar, "Arial", 14, PasswordEvaluationGUITestbed.WINDOW_WIDTH-10, 
-				Pos.BASELINE_LEFT, 30, 320);
+				Pos.BASELINE_LEFT, 30, 640);
 	    label_SpecialChar.setTextFill(Color.RED);
 	    
 	    // Log enough satisfied or not
 	    setupLabelUI(label_LongEnough, "Arial", 14, PasswordEvaluationGUITestbed.WINDOW_WIDTH-10, 
-				Pos.BASELINE_LEFT, 30, 350);
+				Pos.BASELINE_LEFT, 30, 700);
 	    label_LongEnough.setTextFill(Color.RED);
 		resetAssessments();
 		
@@ -163,13 +186,19 @@ public class UserInterface {
 
 		
 		//login button that sets new scene if credentials are valid
-		loginButton.setLayoutX(10);
-		loginButton.setLayoutY(180);
-		loginButton.setOnAction(e -> {
-			if (performEvaluation()) {  // Only switch scene if password is valid
+		SignUpButton.setLayoutX(900);
+		SignUpButton.setLayoutY(250);
+		SignUpButton.setOnAction(e -> {
+			// Calls helper functions to validate that both username and password meet requirements
+			boolean passwordValid = performEvaluation();
+			boolean usernameValid = evaluateUsername();
+			boolean emailValid = evaluateEmail();
+			
+			if(passwordValid && usernameValid && emailValid)
+			{  // Only switch scene if password, username and email are valid
 				login(primaryStage);
 			} else {
-				errorMessage.setText("Password requirements not met!");
+				errorMessage.setText("Invalid username or password");
 			}
 		});
 		
@@ -179,27 +208,34 @@ public class UserInterface {
 		errorMessage.setLayoutX(10);
 		errorMessage.setLayoutY(250);
 		
+
+		
 		// Place all of the just-initialized GUI elements into the pane, whether they have text or not
-		theRoot.getChildren().addAll(label_ApplicationTitle, label_Username, text_UserName, label_Password, text_Password, 
+		layout.getChildren().addAll(label_ApplicationTitle, label_Username, text_UserName, label_Password, text_Password, label_Email, text_Email,
 				noInputFound, label_errPassword, errPassword, errPasswordPart3, validPassword,
 				label_Requirements, label_UpperCase, label_LowerCase, label_NumericDigit,
-				label_SpecialChar, label_LongEnough, loginButton);
+				label_SpecialChar, label_LongEnough,  label_profficiencyChecker, label_javaFX, beginner, intermediate, advanced, expert, SignUpButton);
 		
-
+		Scene signUpScene = new Scene(layout, 1000, 800);
+		primaryStage.setScene(signUpScene);
+		primaryStage.setTitle("Sign Up");
 	}
 	
 	/**********
-	 * Private local method to handle login, and switching to new stage / scene.
+	 * Login: Private local method to handle login, and switching to new stage / scene.
+	 * As is: As long as the criteria for the sign up button are met, sends it to logged in page by creating new VBox.
+	 * NEEDS: To create an actual "logged in" or "main app" gui for most of the functionality, then send it there.
 	 */
 	private void login(Stage primaryStage) {
-		StackPane loggedInRoot = new StackPane();
-		Label welcomeLabel = new Label("Welcome! You are logged in!");
-		loggedInRoot.getChildren().add(welcomeLabel);
-		
-		Scene loggedInScene = new Scene(loggedInRoot, 800, 500);
-		primaryStage.setScene(loggedInScene);
-		primaryStage.setTitle("Logged In");
-		primaryStage.show();
+	VBox appLayout = new VBox(10);
+	appLayout.setAlignment(Pos.CENTER);
+	
+	Label successfulSignUp = new Label("Successful Sign Up");
+	appLayout.getChildren().add(successfulSignUp);
+	
+	Scene appScene = new Scene(appLayout, 1000, 800);
+	primaryStage.setScene(appScene);
+	primaryStage.setTitle("App");
 	}
 	
 	/**********
@@ -246,15 +282,76 @@ public class UserInterface {
 	}
 	
 
+	/****
+	 * evaluateUsername: Validates that the username entered is between 8 and 16 characters.
+	 * As is: Just checks that the length of the username is between 8 and 16 characters.
+	 * NEEDS: Might need more validation, like no numbers, special characters, etc.
+	 * @return true if it is valid, false otherwise
+	 */
+	private boolean evaluateUsername() {
+		String username = text_UserName.getText();
+		
+		noInputFound.setText("");
+		
+		if(username.isEmpty()) {
+			noInputFound.setText("No username input found!");
+			return false;
+		} else if(username.length() < 8 || username.length() > 16) {
+			noInputFound.setText("username must be between 8 and 16 characters");
+			return false;
+		}
+		
+		return true;
+	}
+	
+	
+	/***
+	* evaluateEmail:Evaluate if the inputted username is valid or not
+	* As is: Checks for 4 characters or more, if it ends in .com, and has 1 '@' symbol
+	* NEEDS: To be able handle more email types, or find another way of validating its an email. 
+	*/
+	private boolean evaluateEmail() {
+		String email = text_Email.getText();
+		
+		noInputFound.setText("");
+		
+		if(email.isEmpty()) {
+			noInputFound.setText("No email input found!");
+			return false;
+		} else if(email.length() <= 4) {
+			noInputFound.setText("Email is not long enough!");
+		} 
+		
+		if(!email.endsWith(".com")) {
+			noInputFound.setText(".com missing from end of email!");
+			return false;
+		}
+		
+		int atCount = 0;
+		
+		for(int i = 0; i < email.length(); i++) {
+			if(email.charAt(i) == '@') {
+				atCount++;
+			}
+		}
+		
+		if(atCount != 1) {
+			noInputFound.setText("Email must have 1 '@' symbol!");
+			return false;
+		}
+		
+		return true;
+	}
 	
 	/**********
 	 * Evaluate the input whenever the user changes it and update the GUI and the console so the
 	 * user knows what is going on
 	 * @return valid or invalid
 	 */
-	private boolean performEvaluation() {
+ 	private boolean performEvaluation() {
 	    // Get the user input string from the GUI
 	    String inputText = text_Password.getText();
+	    char[] passwordChars = inputText.toCharArray();
 	    
 	    // If the input is empty, set that flag and stop
 	    if (inputText.isEmpty()) {
@@ -263,7 +360,7 @@ public class UserInterface {
 	    } else {
 	        // There is input to process. Call the evaluatePassword method to assess each of the
 	        // remaining criteria 
-	        String errMessage = PasswordEvaluator.evaluatePassword(inputText);
+	        String errMessage = PasswordEvaluator.evaluatePassword(passwordChars);
 	        updateFlags();  // Check for each criterion and set the GUI for that element to green
 	        
 	        if (!errMessage.isEmpty()) {

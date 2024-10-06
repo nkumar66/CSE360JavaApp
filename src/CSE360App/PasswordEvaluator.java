@@ -23,17 +23,17 @@ public class PasswordEvaluator {
 				currentCharNdx + "  |  The currentChar: \"" + currentChar + "\"");
 	}
 
-	public static String evaluatePassword(String input) {
+	public static String evaluatePassword(char[] input) {
 		passwordErrorMessage = "";
 		passwordIndexofError = 0;
-		inputLine = input;
+		inputLine = new String(input);
 		currentCharNdx = 0;
 		
-		if(input.length() <= 0) return "*** Error *** The password is empty!";
+		if(input.length <= 0) return "*** Error *** The password is empty!";
 		
-		currentChar = input.charAt(0);		// The current character from the above indexed position
+		currentChar = input[0];		// The current character from the above indexed position
 
-		passwordInput = input;
+		passwordInput = new String(input);
 		foundUpperCase = false;
 		foundLowerCase = false;	
 		foundNumericDigit = false;
@@ -68,7 +68,7 @@ public class PasswordEvaluator {
 			if (currentCharNdx >= inputLine.length())
 				running = false;
 			else
-				currentChar = input.charAt(currentCharNdx);
+				currentChar = input[currentCharNdx];
 			
 			System.out.println();
 		}

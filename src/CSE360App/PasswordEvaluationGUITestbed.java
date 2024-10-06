@@ -24,12 +24,12 @@ import javafx.stage.Stage;
 public class PasswordEvaluationGUITestbed extends Application {
 	
 	/** The width of the pop-up window for the user interface */
-	public final static double WINDOW_WIDTH = 500;
+	public final static double WINDOW_WIDTH = 1000;
 	/** The height of the pop-up window for the user interface */
-	public final static double WINDOW_HEIGHT = 430;
+	public final static double WINDOW_HEIGHT = 800;
 	
 	/** A temporary object referencing the application's user interface */
-	public UserInterface theGUI;
+	public SignUpInterface theGUI;
 	
 	/** The default constructor */
 	public PasswordEvaluationGUITestbed() {
@@ -51,7 +51,7 @@ public class PasswordEvaluationGUITestbed extends Application {
 		
 		Pane theRoot = new Pane();							// Create a pane within the window
 		
-		theGUI = new UserInterface(theRoot, theStage);				// Create the Graphical User Interface
+		theGUI = new SignUpInterface( theStage);				// Create the Graphical User Interface
 		
 		Scene theScene = new Scene(theRoot, WINDOW_WIDTH, WINDOW_HEIGHT);	// Create the scene
 		
