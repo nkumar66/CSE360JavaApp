@@ -1,6 +1,7 @@
 package CSE360App;
 import java.util.List;
 import java.util.LinkedList;
+import java.util.Scanner;
 
 
 public class AdminClass extends UserClass {
@@ -18,11 +19,22 @@ public class AdminClass extends UserClass {
     }
 
     public boolean deleteUserAccount(UserClass user) {
-        return false;
+    	System.out.println("Are you sure you want to delete the account for " + user.getUsername() + "? (Yes/No)");
+        Scanner scanner = new Scanner(System.in);
+        String confirmation = scanner.nextLine();
+
+        if (confirmation.equalsIgnoreCase("Yes")) {
+            users.remove(user);
+            System.out.println("User " + user.getUsername() + " has been deleted.");
+            return true;
+        } else {
+            System.out.println("User deletion canceled.");
+            return false;
+        }
     }
 
-    public List<UserClass> listUserAccounts() {
-    	System.out.println("Listng all user accounts: ");
+    public List<UserClass> listUserAccounts() {		//to list all the user accounts
+    	System.out.println("Listing all user accounts: ");
     	for (UserClass user : users) {
     		String fullname = user.getFirstName() + " " +user.getMiddleName() + " " +  user.getLastName();
     		System.out.println("Username: " + user.getUsername() + ", Full Name:  " + fullname + ", Role: " + user.getRoles());                      
@@ -41,9 +53,19 @@ public class AdminClass extends UserClass {
     }
 
     public void removeRole(UserClass user, String role) {
+    	if (user.getRoles().contains(role)) {
+            user.getRoles().remove(role);  // Remove role from the user
+            System.out.println("Role " + role + " removed from user " + user.getUsername());
+        } else {
+            System.out.println("User " + user.getUsername() + " does not have the role " + role);
+        }
     }
 
-    public List<UserClass> ListRoles() {
+    public List<UserClass> listRoles() {
         return users;
+    }
+    
+    public List<String> getRoles(UserClass user) {
+        return user.getRoles();  // Return the user's roles
     }
 }
