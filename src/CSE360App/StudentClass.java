@@ -1,5 +1,6 @@
 package CSE360App;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class StudentClass extends UserClass {
@@ -8,15 +9,15 @@ public class StudentClass extends UserClass {
 	Map<String, SkillLevel> skillMap = new HashMap<>();
 
 	public StudentClass(String username, char[] password, boolean isOTP, String firstName, String middleName,
-			String lastName) {
-		super(username, password, isOTP, firstName, middleName, lastName);
+			String lastName, List<String> roles) {
+		super(username, password, isOTP, firstName, middleName, lastName, roles);
 		for(int i = 0; i < skills.length; i++) {
 			skillMap.put(skills[i], SkillLevel.INTERMEDIATE);
 		}
 	}
 	public StudentClass(String username, char[] password, boolean isOTP, String firstName, String middleName,
-			String lastName, SkillLevel[] skillLevels) {
-		super(username, password, isOTP, firstName, middleName, lastName);
+			String lastName, List<String> roles, SkillLevel[] skillLevels) {
+		super(username, password, isOTP, firstName, middleName, lastName, roles);
 		for(int i = 0; i < skillLevels.length; i++) {
 			skillMap.put(skills[i], skillLevels[i]);
 		}

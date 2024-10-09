@@ -1,5 +1,7 @@
 // User Class
 package CSE360App;
+import java.util.List;
+
 
 public class UserClass {
 	
@@ -9,11 +11,12 @@ public class UserClass {
 	private boolean isOTP;
 	private String firstName;
 	private String middleName;
-	private String lastName;	
+	private String lastName;
+	private List<String> roles;
 
 
 public UserClass(String username, char[] password, boolean isOTP,
-        String firstName, String middleName, String lastName){
+        String firstName, String middleName, String lastName, List<String> roles){
 	this.username = username;
 	this.password = password;
 	this.isOTP = true;
@@ -23,9 +26,29 @@ public UserClass(String username, char[] password, boolean isOTP,
 	}
 
 
-// change password method 
-public void changePassword(char [] newPassword){
-	this.password = newPassword;
+	// change password method 
+	public void changePassword(char [] newPassword){
+		this.password = newPassword;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public String getMiddleName() {
+		return middleName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+	
+	public List<String> getRoles() {
+		return roles;
 	}
 }
 
