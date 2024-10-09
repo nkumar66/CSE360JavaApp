@@ -1,23 +1,55 @@
 package CSE360App;
-import java.util.List;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 
 public class AdminClass extends UserClass {
-    private List<String> roles = new LinkedList<>();
-    private List<UserClass> users = new LinkedList<>();
+	private static List<UserClass> users = new LinkedList<>();  // List of registered users
+	private static Map<String, String[]> inviteCodes = new HashMap<>();  // Map of invite codes
+    
 
     public AdminClass(String username, char[] password, boolean isOTP, String firstName, String middleName, String lastName, List<String> roles) {
         super(username, password, isOTP, firstName, middleName, lastName, roles);
     }
 
-    public void inviteUser(String email, String role) {
+    public static void inviteUser(String email, String role) {
+        // Generate an invite code
+        String inviteCode = generateInviteCode();
+        
+        // Store the invite code
+        inviteCodes.put(inviteCode, new String[]{email, role});
+        System.out.println("Invite code for " + email + ": " + inviteCode);
+    }
+    
+    public static void completeSignUp(String inviteCode, char[] password) {
+        if (inviteCodes.containsKey(inviteCode)) {
+            String[] inviteDetails = inviteCodes.get(inviteCode);
+            String email = inviteDetails[0];
+            String role = inviteDetails[1];
+
+            // Create a new user with the provided password and role
+            UserClass newUser = new UserClass(email, password, false, "", "", "", List.of(role)); // Placeholder defaults until everything is more connected
+            users.add(newUser);
+            
+            inviteCodes.remove(inviteCode);
+            System.out.println("User " + email + " has successfully signed up.");
+        } else {
+            System.out.println("Invalid invite code.");
+        }
     }
 
-    public void resetUserAccount(UserClass user) {
-    }
+    public static void resetUserAccount(UserClass user) {
+    	// Generate one time password
+        String oneTimePassword = generateOneTimePassword(); 
+        long expirationTime = System.currentTimeMillis() + 86400000; // 24 hours from now
 
+        user.setOneTimePassword(oneTimePassword, expirationTime);  // Set OTP and expiration
+        System.out.println("One-time password for " + user.getUsername() + ": " + oneTimePassword);
+    }
+    
     public boolean deleteUserAccount(UserClass user) {
     	System.out.println("Are you sure you want to delete the account for " + user.getUsername() + "? (Yes/No)");
         Scanner scanner = new Scanner(System.in);
@@ -60,12 +92,26 @@ public class AdminClass extends UserClass {
             System.out.println("User " + user.getUsername() + " does not have the role " + role);
         }
     }
-
-    public List<UserClass> listRoles() {
-        return users;
+    public List<UserClass> listUsers() {  //to list all the user accounts
+        System.out.println("Listing all user accounts: ");
+        for (UserClass user : users) {
+            String fullname = user.getFirstName() + " " + user.getMiddleName() + " " + user.getLastName();
+            System.out.println("Username: " + user.getUsername() + ", Full Name: " + fullname + ", Role: " + user.getRoles());
+        }
+        return new LinkedList<>(users);  // Return a copy of the user list
     }
     
     public List<String> getRoles(UserClass user) {
         return user.getRoles();  // Return the user's roles
     }
+    
+    private static String generateOneTimePassword() {
+        return Integer.toHexString((int) (Math.random() * Integer.MAX_VALUE)); // Multiply a random float from 0 to 1 by the int max value and hex it to look cool 
+    }
+    
+    private static String generateInviteCode() {
+        return Integer.toHexString((int) (Math.random() * Integer.MAX_VALUE));
+    }
+    
+    
 }
