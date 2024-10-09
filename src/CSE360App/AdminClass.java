@@ -1,5 +1,6 @@
 package CSE360App;
 import java.util.LinkedList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,14 +25,24 @@ public class AdminClass extends UserClass {
         System.out.println("Invite code for " + email + ": " + inviteCode);
     }
     
-    public static void completeSignUp(String inviteCode, char[] password) {
+    public static void completeSignUp(String inviteCode, char[] password, char[] confirmPassword, String firstName, String middleName, String lastName, String preferredFirstName) {
         if (inviteCodes.containsKey(inviteCode)) {
+            if (!Arrays.equals(password, confirmPassword)) {
+                System.out.println("Passwords do not match. Please try again.");
+                return;
+            }
+            
             String[] inviteDetails = inviteCodes.get(inviteCode);
             String email = inviteDetails[0];
             String role = inviteDetails[1];
 
-            // Create a new user with the provided password and role
-            UserClass newUser = new UserClass(email, password, false, "", "", "", List.of(role)); // Placeholder defaults until everything is more connected
+            // Use the provided preferred name if entered, otherwise default to first name
+            if (!preferredFirstName.isEmpty()) {
+                firstName = preferredFirstName;
+            }
+
+            // Create a new user with the provided details
+            UserClass newUser = new UserClass(email, password, false, firstName, middleName, lastName, List.of(role));
             users.add(newUser);
             
             inviteCodes.remove(inviteCode);
@@ -41,12 +52,14 @@ public class AdminClass extends UserClass {
         }
     }
 
+
     public static void resetUserAccount(UserClass user) {
-    	// Generate one time password
-        String oneTimePassword = generateOneTimePassword(); 
+        // Generate one-time password and set expiration
+        String oneTimePassword = generateOneTimePassword();
         long expirationTime = System.currentTimeMillis() + 86400000; // 24 hours from now
 
-        user.setOneTimePassword(oneTimePassword, expirationTime);  // Set OTP and expiration
+        user.setOneTimePassword(oneTimePassword, expirationTime); // Set OTP and expiration
+        user.setOTP(true);  // Mark the account as OTP required
         System.out.println("One-time password for " + user.getUsername() + ": " + oneTimePassword);
     }
     
@@ -112,6 +125,11 @@ public class AdminClass extends UserClass {
     private static String generateInviteCode() {
         return Integer.toHexString((int) (Math.random() * Integer.MAX_VALUE));
     }
+    
+    public static boolean validateInviteCode(String inviteCode) {
+        return inviteCodes.containsKey(inviteCode);
+    }
+
     
     
 }
