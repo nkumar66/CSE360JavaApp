@@ -1,29 +1,51 @@
-// User Class
 package CSE360App;
 import java.util.List;
 
 
 public class UserClass {
-	
-	public String username;
-	
-	private char[] password;
-	private boolean isOTP;
-	private String firstName;
-	private String middleName;
-	private String lastName;
-	private List<String> roles;
+    private String username;
+    private char[] password;
+    private boolean isOTP;
+    private String firstName;
+    private String middleName;
+    private String lastName;
+    private List<String> roles;
+    
+    private String oneTimePassword;
+    private long otpExpiration;
 
 
-public UserClass(String username, char[] password, boolean isOTP,
-        String firstName, String middleName, String lastName, List<String> roles){
-	this.username = username;
-	this.password = password;
-	this.isOTP = true;
-	this.firstName = firstName;
-	this.middleName = middleName;
-	this.lastName = lastName;
-	}
+    public UserClass(String username, char[] password, boolean isOTP, String firstName, String middleName, String lastName, List<String> roles) {
+        this.username = username;
+        this.password = password;
+        this.isOTP = isOTP;
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
+        this.roles = roles;
+    }
+    
+    // Method to set the one-time password and expiration time
+    public void setOneTimePassword(String otp, long expiration) {
+        this.oneTimePassword = otp;
+        this.otpExpiration = expiration;
+    }
+    // Method to get the one-time password
+    public String getOneTimePassword() {
+        return oneTimePassword;
+    }
+
+    // Method to get OTP expiration time
+    public long getOtpExpiration() {
+        return otpExpiration;
+    }
+
+    // Method to clear the OTP after it's used (maybe not needed)
+    public void clearOneTimePassword() {
+        this.oneTimePassword = null;
+        this.otpExpiration = 0;
+    }
+	
 
 
 	// change password method 
