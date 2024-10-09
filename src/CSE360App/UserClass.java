@@ -45,6 +45,14 @@ public class UserClass {
         this.oneTimePassword = null;
         this.otpExpiration = 0;
     }
+    
+    public boolean isOTP() {
+        return isOTP;
+    }
+    
+    public void setOTP(boolean isOTP) {
+        this.isOTP = isOTP;
+    }
 	
 
 
