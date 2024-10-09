@@ -164,6 +164,7 @@ public class LoginInterface {
     	
     }
     
+    // VALIDATEOTP NEEDED?
     /**
      * validateInviteCode: Compares user inputted inviteCode to database and ensures it is valid
      * As is: non-functional
