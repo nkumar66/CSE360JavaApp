@@ -78,16 +78,6 @@ public class AdminClass extends UserClass {
         }
     }
 
-    public List<UserClass> listUserAccounts() {		//to list all the user accounts
-    	System.out.println("Listing all user accounts: ");
-    	for (UserClass user : users) {
-    		String fullname = user.getFirstName() + " " +user.getMiddleName() + " " +  user.getLastName();
-    		System.out.println("Username: " + user.getUsername() + ", Full Name:  " + fullname + ", Role: " + user.getRoles());                      
-    	}
-    	
-        return new LinkedList<>();
-    }
-
     public void addRole(UserClass user, String roles) {
     	if (!user.getRoles().contains(roles)) {
             user.getRoles().add(roles); 
