@@ -6,30 +6,37 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+/*******
+ * <p> Admin Class </p>
+ * 
+ * <p> Description: The Admin Class contains the many functions that an Admin is allowed to do and can do. </p>
+ * 
+ * 
+ */ 
 
 public class AdminClass extends UserClass {
 	private static List<UserClass> users = new LinkedList<>();  // List of registered users
 	private static Map<String, String[]> inviteCodes = new HashMap<>();  // Map of invite codes
     
-
-	public AdminClass(String username, char[] password, boolean isOTP, String firstName, String middleName, String lastName, String preferredFirstName, String email, List<String> roles) {
-	    super(username, password, isOTP, firstName, middleName, lastName, preferredFirstName, email, roles);
+	
+	public AdminClass(String username, char[] password, boolean isOTP, String firstName, String middleName, String lastName, String preferredFirstName, String email, List<String> roles) {         //Construtor
+	    super(username, password, isOTP, firstName, middleName, lastName, preferredFirstName, email, roles);	//Initializing the details of the user
 	}
 
 
-    public static void inviteUser(String email, String role) {
+    public static void inviteUser(String email, String role) {	    // Method created in order to invite the user by giving a code and their email.
         // Generate an invite code
-        String inviteCode = generateInviteCode();
+        String inviteCode = generateInviteCode();		
         
         // Store the invite code
         inviteCodes.put(inviteCode, new String[]{email, role});
-        System.out.println("Invite code for " + email + ": " + inviteCode);
+        System.out.println("Invite code for " + email + ": " + inviteCode);		//prints out the invite code
     }
     
 
-    public static void completeSignUp(String inviteCode, char[] password, char[] confirmPassword, String firstName, String middleName, String lastName, String preferredFirstName) {
-        if (!Arrays.equals(password, confirmPassword)) {
-            System.out.println("Passwords do not match. Please try again.");
+    public static void completeSignUp(String inviteCode, char[] password, char[] confirmPassword, String firstName, String middleName, String lastName, String preferredFirstName) {   // Method created in order to signup/log into the page.
+        if (!Arrays.equals(password, confirmPassword)) {		// If statement created to check if the password exists.
+            System.out.println("Passwords do not match. Please try again.");		// If the password does not exists, (doesn't match) then print out an error message asking them to try again.
             return;
         }
 
@@ -79,29 +86,29 @@ public class AdminClass extends UserClass {
     public boolean deleteUserAccount(UserClass user) {
     	System.out.println("Are you sure you want to delete the account for " + user.getUsername() + "? (Yes/No)");
         Scanner scanner = new Scanner(System.in);
-        String confirmation = scanner.nextLine();
+        String confirmation = scanner.nextLine();		//to get input from the console
 
-        if (confirmation.equalsIgnoreCase("Yes")) {
+        if (confirmation.equalsIgnoreCase("Yes")) {		//if the case is yes, then prints the user has been deleted
             users.remove(user);
             System.out.println("User " + user.getUsername() + " has been deleted.");
             return true;
         } else {
-            System.out.println("User deletion canceled.");
+            System.out.println("User deletion canceled.");		//otherwise the user deletion is canceled, and it doens't do anything.
             return false;
         }
     }
 
     public void addRole(UserClass user, String roles) {
-    	if (!user.getRoles().contains(roles)) {
+    	if (!user.getRoles().contains(roles)) {				//if the user doesn't have the role, then it'll add the role
             user.getRoles().add(roles); 
-            System.out.println("Role " + roles + " added to user " + user.getUsername());
+            System.out.println("Role " + roles + " added to user " + user.getUsername());		//prints out the confirmation that this happened
         } else {
-            System.out.println("User " + user.getUsername() + " already has the role " + roles);
+            System.out.println("User " + user.getUsername() + " already has the role " + roles);		//otherwise prints that it already has the role.
         }
     }
 
     public void removeRole(UserClass user, String role) {
-    	if (user.getRoles().contains(role)) {
+    	if (user.getRoles().contains(role)) {		//Checks if the user actually has the role
             user.getRoles().remove(role);  // Remove role from the user
             System.out.println("Role " + role + " removed from user " + user.getUsername());
         } else {
@@ -110,7 +117,7 @@ public class AdminClass extends UserClass {
     }
     public List<UserClass> listUsers() {  //to list all the user accounts
         System.out.println("Listing all user accounts: ");
-        for (UserClass user : users) {
+        for (UserClass user : users) {		//goes through all the users in the user Class and prints their first, middle, last name as well as username
             String fullname = user.getFirstName() + " " + user.getMiddleName() + " " + user.getLastName();
             System.out.println("Username: " + user.getUsername() + ", Full Name: " + fullname + ", Role: " + user.getRoles());
         }
@@ -126,15 +133,15 @@ public class AdminClass extends UserClass {
     }
     
     private static String generateInviteCode() {
-        return Integer.toHexString((int) (Math.random() * Integer.MAX_VALUE));
+        return Integer.toHexString((int) (Math.random() * Integer.MAX_VALUE));		//generates the invite code with a random value
     }
     
     public static boolean validateInviteCode(String inviteCode) {
-        return inviteCodes.containsKey(inviteCode);
+        return inviteCodes.containsKey(inviteCode);				//checks if the invite code is the correct one that matches
     }
     
     public static UserClass findUserByUsername(String username) {
-        for (UserClass user : users) {
+        for (UserClass user : users) {		//goes through all the users in the user class and checks if the username matches what you're looking for
             if (user.getUsername().equals(username)) {
                 return user;
             }
@@ -143,7 +150,7 @@ public class AdminClass extends UserClass {
     }
     
     public static UserClass findUserByEmail(String email) {
-        for (UserClass user : users) {
+        for (UserClass user : users) {				//goes through all the users in the user class and checks if their email matches the one you're looking for.
             if (user.getEmail().equals(email)) {
                 return user;
             }
