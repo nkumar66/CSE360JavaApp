@@ -26,32 +26,44 @@ public class AdminClass extends UserClass {
         System.out.println("Invite code for " + email + ": " + inviteCode);
     }
     
+
     public static void completeSignUp(String inviteCode, char[] password, char[] confirmPassword, String firstName, String middleName, String lastName, String preferredFirstName) {
-        if (inviteCodes.containsKey(inviteCode)) {
-            if (!Arrays.equals(password, confirmPassword)) {
-                System.out.println("Passwords do not match. Please try again.");
-                return;
-            }
-            
+        if (!Arrays.equals(password, confirmPassword)) {
+            System.out.println("Passwords do not match. Please try again.");
+            return;
+        }
+
+        // Check if there are no users yet (meaning this is the first user)
+        boolean isFirstUser = users.isEmpty();
+        
+        String role = "Student"; // Default role is Student
+
+        if (isFirstUser) {
+            // If first user, make them Admin
+            role = "Admin";
+            System.out.println("First user detected, assigning Admin role.");
+        } else if (inviteCodes.containsKey(inviteCode)) {
+            // Use the role from the invite code if provided
             String[] inviteDetails = inviteCodes.get(inviteCode);
-            String email = inviteDetails[0];
-            String role = inviteDetails[1];
-
-            // Use the provided preferred name if entered, otherwise default to first name
-            if (!preferredFirstName.isEmpty()) {
-                firstName = preferredFirstName;
-            }
-
-            // Create a new user with the provided details
-            UserClass newUser = new UserClass(email, password, false, firstName, middleName, lastName, preferredFirstName, email, List.of(role));
-            users.add(newUser);
-            
-            inviteCodes.remove(inviteCode);
-            System.out.println("User " + email + " has successfully signed up.");
+            role = inviteDetails[1];
         } else {
             System.out.println("Invalid invite code.");
+            return;
         }
+
+        // Use the provided preferred name if entered, otherwise default to first name
+        if (!preferredFirstName.isEmpty()) {
+            firstName = preferredFirstName;
+        }
+
+        // Create a new user with the provided details
+        UserClass newUser = new UserClass(firstName, password, false, firstName, middleName, lastName, preferredFirstName, "email@example.com", List.of(role)); // Email is a placeholder
+        users.add(newUser);
+
+        inviteCodes.remove(inviteCode); // Clean up used invite code if relevant
+        System.out.println("User " + newUser.getUsername() + " has successfully signed up with the role: " + role);
     }
+
 
 
     public static void resetUserAccount(UserClass user) {
