@@ -12,9 +12,10 @@ public class AdminClass extends UserClass {
 	private static Map<String, String[]> inviteCodes = new HashMap<>();  // Map of invite codes
     
 
-    public AdminClass(String username, char[] password, boolean isOTP, String firstName, String middleName, String lastName, List<String> roles) {
-        super(username, password, isOTP, firstName, middleName, lastName, roles);
-    }
+	public AdminClass(String username, char[] password, boolean isOTP, String firstName, String middleName, String lastName, String preferredFirstName, String email, List<String> roles) {
+	    super(username, password, isOTP, firstName, middleName, lastName, preferredFirstName, email, roles);
+	}
+
 
     public static void inviteUser(String email, String role) {
         // Generate an invite code
@@ -42,7 +43,7 @@ public class AdminClass extends UserClass {
             }
 
             // Create a new user with the provided details
-            UserClass newUser = new UserClass(email, password, false, firstName, middleName, lastName, List.of(role));
+            UserClass newUser = new UserClass(email, password, false, firstName, middleName, lastName, preferredFirstName, email, List.of(role));
             users.add(newUser);
             
             inviteCodes.remove(inviteCode);
