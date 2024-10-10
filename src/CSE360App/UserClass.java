@@ -79,4 +79,12 @@ public class UserClass {
     public void changePassword(char[] newPassword) {
         this.password = newPassword;
     }
+    
+    public void setOTP(boolean isOTP) {
+        this.isOTP = isOTP;
+    }
+
+
+
+
 }
