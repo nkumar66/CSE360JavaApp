@@ -41,6 +41,7 @@ public class SignUpInterface {
 	// The names of the variables specify their function and each is initialize as required
 	private Label label_ApplicationTitle = new Label("CSE 360 App");
 	private Label label_Password = new Label("Enter the password here");
+	private Label label_PasswordConfirmation = new Label("Confirm your password here");
 	private Label label_Username = new Label("Enter username here");
 	private Label label_Email = new Label("Enter email address here");
 	
@@ -51,6 +52,7 @@ public class SignUpInterface {
 	// Textfield's for user input
 	private TextField text_UserName = new TextField();
 	private TextField text_Password = new PasswordField();
+	private TextField text_PasswordConfirmation = new TextField();
 	private TextField text_Email = new TextField();
 	private TextFlow errPassword;
 	
@@ -93,6 +95,7 @@ public class SignUpInterface {
 		label_ApplicationTitle.setFont(Font.font("Arial", 24));
 		label_Username.setFont(Font.font("Arial", 14));
 		label_Password.setFont(Font.font("Arial", 14));
+		label_PasswordConfirmation.setFont(Font.font("Arial", 14));
 		label_Email.setFont(Font.font("Arial", 14));
 		label_javaFX.setFont(Font.font("Arial", 14));
 		label_profficiencyChecker.setFont(Font.font("Arial", 14));
@@ -104,13 +107,14 @@ public class SignUpInterface {
 		text_Password.setPromptText("Password");
 		text_Password.textProperty().addListener((observable, oldValue, newValue) -> {
 		    performEvaluation();
+		text_PasswordConfirmation.setPromptText("Confirm Password");
 		});
 		text_Email.setPromptText("Email Addresss");
 		
 		//Setup Profficency Level Check boxes  here
 		ToggleGroup javaFxProficiencyGroup = new ToggleGroup();
 		RadioButton beginner = new RadioButton("Beginner");
-		RadioButton intermediate = new RadioButton("intermediate");
+		RadioButton intermediate = new RadioButton("Intermediate");
 		RadioButton advanced = new RadioButton("Advanced");
 		RadioButton expert = new RadioButton("Expert");
 		
@@ -211,7 +215,7 @@ public class SignUpInterface {
 
 		
 		// Place all of the just-initialized GUI elements into the pane, whether they have text or not
-		layout.getChildren().addAll(label_ApplicationTitle, label_Username, text_UserName, label_Password, text_Password, label_Email, text_Email,
+		layout.getChildren().addAll(label_ApplicationTitle, label_Username, text_UserName, label_Email, text_Email, label_Password, text_Password, label_PasswordConfirmation, text_PasswordConfirmation,
 				noInputFound, label_errPassword, errPassword, errPasswordPart3, validPassword,
 				label_Requirements, label_UpperCase, label_LowerCase, label_NumericDigit,
 				label_SpecialChar, label_LongEnough,  label_profficiencyChecker, label_javaFX, beginner, intermediate, advanced, expert, SignUpButton);
