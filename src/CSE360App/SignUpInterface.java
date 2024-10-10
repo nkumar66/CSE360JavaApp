@@ -100,6 +100,7 @@ public class SignUpInterface {
 		label_javaFX.setFont(Font.font("Arial", 14));
 		label_profficiencyChecker.setFont(Font.font("Arial", 14));
 		
+		
 
 		// Setup any text prompts and listeners here
 		// Password Listener: Used for password requirements
