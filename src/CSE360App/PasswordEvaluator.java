@@ -3,6 +3,8 @@ package CSE360App;
 
 public class PasswordEvaluator {
 
+	
+	//variables that are used thorughout the various functions
 	public static String passwordErrorMessage = "";
 	public static String passwordInput = "";
 	public static int passwordIndexofError = -1;
@@ -16,7 +18,7 @@ public class PasswordEvaluator {
 	private static int currentCharNdx;
 	private static boolean running;
 
-	private static void displayInputState() {
+	private static void displayInputState() {			//displays the pasword size, current char index, and current character
 		System.out.println(inputLine);
 		System.out.println(inputLine.substring(0,currentCharNdx) + "?");
 		System.out.println("The password size: " + inputLine.length() + "  |  The currentCharNdx: " + 
@@ -24,7 +26,7 @@ public class PasswordEvaluator {
 	}
 
 	public static String evaluatePassword(char[] input) {
-		passwordErrorMessage = "";
+		passwordErrorMessage = "";					//evaluates the password to make sure it is a proper password
 		passwordIndexofError = 0;
 		inputLine = new String(input);
 		currentCharNdx = 0;
@@ -36,7 +38,7 @@ public class PasswordEvaluator {
 		passwordInput = new String(input);
 		foundUpperCase = false;
 		foundLowerCase = false;	
-		foundNumericDigit = false;
+		foundNumericDigit = false;			//all the default values, which can then be updated later through the use of the functions.
 		foundSpecialChar = false;
 		foundNumericDigit = false;
 		foundLongEnough = false;
@@ -45,7 +47,7 @@ public class PasswordEvaluator {
 		while (running) {
 			displayInputState();
 			if (currentChar >= 'A' && currentChar <= 'Z') {
-				System.out.println("Upper case letter found");
+				System.out.println("Upper case letter found");						//runs through all the conditions to check to make sure that it runs correctly
 				foundUpperCase = true;
 			} else if (currentChar >= 'a' && currentChar <= 'z') {
 				System.out.println("Lower case letter found");
@@ -53,12 +55,12 @@ public class PasswordEvaluator {
 			} else if (currentChar >= '0' && currentChar <= '9') {
 				System.out.println("Digit found");
 				foundNumericDigit = true;
-			} else if ("~`!@#$%^&*()_-+={}[]|\\:;\"'<>,.?/".indexOf(currentChar) >= 0) {
+			} else if ("~`!@#$%^&*()_-+={}[]|\\:;\"'<>,.?/".indexOf(currentChar) >= 0) {		//checks for the special characters, at least the common ones
 				System.out.println("Special character found");
 				foundSpecialChar = true;
 			} else {
 				passwordIndexofError = currentCharNdx;
-				return "*** Error *** An invalid character has been found!";
+				return "*** Error *** An invalid character has been found!";				
 			}
 			if (currentCharNdx >= 7) {
 				System.out.println("At least 8 characters found");
@@ -68,7 +70,7 @@ public class PasswordEvaluator {
 			if (currentCharNdx >= inputLine.length())
 				running = false;
 			else
-				currentChar = input[currentCharNdx];
+				currentChar = input[currentCharNdx];		//otherwise prints the current index of the character
 			
 			System.out.println();
 		}
@@ -80,7 +82,7 @@ public class PasswordEvaluator {
 		if (!foundLowerCase)
 			errMessage += "Lower case; ";
 		
-		if (!foundNumericDigit)
+		if (!foundNumericDigit)							//these are all conditions to make sure it is a good enough password so it checks all the conditions
 			errMessage += "Numeric digits; ";
 			
 		if (!foundSpecialChar)
@@ -93,7 +95,7 @@ public class PasswordEvaluator {
 			return "";
 		
 		passwordIndexofError = currentCharNdx;
-		return errMessage + "conditions were not satisfied";
+		return errMessage + "conditions were not satisfied";			//last condition, if nothing else works then just say the conditions were not satisfied.
 
 	}
 }

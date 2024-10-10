@@ -31,7 +31,7 @@ public class StudentClass extends UserClass {
     }
 
 
-    public String getSkillLevel(String typeOfSkill) {
+    public String getSkillLevel(String typeOfSkill) {		//to retrieve the skill level for each skill level
         if (skillMap.containsKey(typeOfSkill)) {
             return skillMap.get(typeOfSkill).toString();
         } else {
@@ -41,11 +41,11 @@ public class StudentClass extends UserClass {
 
 
     public void setSkillLevel(String typeOfSkill, SkillLevel skill) {
-        skillMap.put(typeOfSkill, skill);
+        skillMap.put(typeOfSkill, skill);		//to set the skill level to a value
     }
 
 
-    public static String[] getSkills() {
+    public static String[] getSkills() {		//getter for skills
         return skills;
     }
 }

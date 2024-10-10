@@ -28,59 +28,59 @@ public class UserClass {
     }
     
 
-    public String getEmail() {
+    public String getEmail() {			//to return an email
         return email;
     }
 
-    public String getFirstName() {
+    public String getFirstName() {			//to retrieve first name
         return firstName;
     }
 
-    public String getMiddleName() {
+    public String getMiddleName() {		//to retrieve middle name
         return middleName;
     }
 
-    public String getLastName() {
+    public String getLastName() {		//to retrieve last name
         return lastName;
     }
-
-    public String getPreferredFirstName() {
+  
+    public String getPreferredFirstName() {		//to get the first name that is preferred 
         return preferredFirstName != null && !preferredFirstName.isEmpty() ? preferredFirstName : firstName;
     }
 
-    public String getUsername() {
+    public String getUsername() {		//getter for username
         return username;
     }
 
-    public List<String> getRoles() {
+    public List<String> getRoles() {			//getter for users roles
         return roles;
     }
 
 
-    public void setOneTimePassword(String otp, long expiration) {
+    public void setOneTimePassword(String otp, long expiration) {			//sets the one time password
         this.oneTimePassword = otp;
         this.otpExpiration = expiration;
     }
 
-    public String getOneTimePassword() {
+    public String getOneTimePassword() {		//getter for one time password
         return oneTimePassword;
     }
 
-    public long getOtpExpiration() {
+    public long getOtpExpiration() {		//getter for expiration date for otp
         return otpExpiration;
     }
 
     public void clearOneTimePassword() {
-        this.oneTimePassword = null;
+        this.oneTimePassword = null;			//clears the one time password so no one can access it anymore
         this.otpExpiration = 0;
     }
 
     // Change password method
     public void changePassword(char[] newPassword) {
-        this.password = newPassword;
+        this.password = newPassword;			//updates the password from the old password to new password
     }
     
-    public void setOTP(boolean isOTP) {
+    public void setOTP(boolean isOTP) {			//setter for the otp
         this.isOTP = isOTP;
     }
     

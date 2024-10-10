@@ -4,5 +4,5 @@ public enum SkillLevel {
 	BEGINNER,
     INTERMEDIATE,
     ADVANCED,
-    EXPERT
+    EXPERT				//these are the different skill levels available to select
 }
