@@ -1,6 +1,8 @@
 package CSE360App;
 
 
+
+
 //JavaFX imports needed to support the Graphical User Interface
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -111,16 +113,17 @@ public class LoginInterface {
         primaryStage.show();
     }
     
+    
     /*****
      * isInputValid: Validates username and password
-     * As is: Just checks that username and password aren't empty.
-     * NEEDS: Update to actually compare it to database and find user.
+     * Checks if credentials are empty and vaidates them
      * @return true if both username and password are valid, false otherwise.
      *****/
+
     private boolean isInputValid() {
         String username = text_UserName.getText();
-        String password = text_Password.getText();
-        
+        String password = text_Password.getText(); // Now password is a String
+
         if (username.isEmpty()) {
             errorMessage.setText("Username cannot be empty");
             return false;
@@ -128,8 +131,17 @@ public class LoginInterface {
             errorMessage.setText("Password cannot be empty");
             return false;
         }
-        return true;
+
+        // Validate against stored users
+        UserClass foundUser = AdminClass.findUserByUsername(username);
+        if (foundUser != null && foundUser.validatePassword(password)) {
+            return true;
+        } else {
+            errorMessage.setText("Invalid username or password");
+            return false;
+        }
     }
+
     
     /****
      * proceedToLoggedIn: Sends user to main page if they enter valid credentials

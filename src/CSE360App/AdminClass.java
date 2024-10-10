@@ -132,6 +132,16 @@ public class AdminClass extends UserClass {
     public static boolean validateInviteCode(String inviteCode) {
         return inviteCodes.containsKey(inviteCode);
     }
+    
+    public static UserClass findUserByUsername(String username) {
+        for (UserClass user : users) {
+            if (user.getUsername().equals(username)) {
+                return user;
+            }
+        }
+        return null; // Return null if no user is found
+    }
+
 
     
     

@@ -83,6 +83,11 @@ public class UserClass {
     public void setOTP(boolean isOTP) {
         this.isOTP = isOTP;
     }
+    
+    public boolean validatePassword(String inputPassword) {
+        return new String(this.password).equals(inputPassword); // Compares input password with stored password
+    }
+
 
 
 
