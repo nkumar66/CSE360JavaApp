@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.paint.Color;
@@ -16,6 +17,7 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToggleGroup;
 
 /**
@@ -47,7 +49,18 @@ public class SignUpInterface {
 	
 	//Profficiency Level Labels
 	private Label label_profficiencyChecker = new Label("Please select your Proficiency Level for each of the following: ");
-	private Label label_javaFX = new Label("JavaFX");
+	private ToggleGroup Astah = new ToggleGroup();
+	private ToggleGroup Eclipse = new ToggleGroup();
+	private ToggleGroup Git = new ToggleGroup();
+	private ToggleGroup Java = new ToggleGroup();
+	private ToggleGroup JavaFX = new ToggleGroup();
+	private ToggleGroup Scrum = new ToggleGroup();
+	
+	
+	private RadioButton beginner = new RadioButton("Beginner");
+	private RadioButton intermediate = new RadioButton("Intermediate");
+	private RadioButton advanced = new RadioButton("Advanced");
+	private RadioButton expert = new RadioButton("Expert");
 	
 	// Textfield's for user input
 	private TextField text_UserName = new TextField();
@@ -74,6 +87,7 @@ public class SignUpInterface {
     //Login Button: Actual button itself and an error message if password is not structured correctly
 	private Button SignUpButton = new Button("Sign Up");
 	private Label errorMessage = new Label("");
+	private String role;
 	/**********************************************************************************************
 
 	Constructors
@@ -84,9 +98,19 @@ public class SignUpInterface {
 	 * This method initializes all of the elements of the graphical user interface. These assignments
 	 * determine the location, size, font, color, and change and event handlers for each GUI object.
 	 */
-	public SignUpInterface(Stage primaryStage) {
+	public SignUpInterface(Stage primaryStage, String SignupCode) {
 		
+//		String role = "";
 		
+		if(SignupCode.endsWith("ADMSTU")) {
+			role = "admin-student";
+		} else if (SignupCode.endsWith("ADM")) {
+			role = "admin";
+		} else if(SignupCode.endsWith("INS")) {
+			role = "instructor";
+		} else {
+			role = "student";
+		}
 		//Used Vbox for easy centering
 		VBox layout = new VBox(10);
 		layout.setAlignment(Pos.CENTER);
@@ -97,7 +121,6 @@ public class SignUpInterface {
 		label_Password.setFont(Font.font("Arial", 14));
 		label_PasswordConfirmation.setFont(Font.font("Arial", 14));
 		label_Email.setFont(Font.font("Arial", 14));
-		label_javaFX.setFont(Font.font("Arial", 14));
 		label_profficiencyChecker.setFont(Font.font("Arial", 14));
 		
 		
@@ -112,17 +135,10 @@ public class SignUpInterface {
 		});
 		text_Email.setPromptText("Email Addresss");
 		
-		//Setup Profficency Level Check boxes  here
-		ToggleGroup javaFxProficiencyGroup = new ToggleGroup();
-		RadioButton beginner = new RadioButton("Beginner");
-		RadioButton intermediate = new RadioButton("Intermediate");
-		RadioButton advanced = new RadioButton("Advanced");
-		RadioButton expert = new RadioButton("Expert");
+
+
 		
-		beginner.setToggleGroup(javaFxProficiencyGroup);
-		intermediate.setToggleGroup(javaFxProficiencyGroup);
-		advanced.setToggleGroup(javaFxProficiencyGroup);
-		expert.setToggleGroup(javaFxProficiencyGroup);
+
 		
 	    
 		// Establish an error message for the case where there is no input
@@ -191,6 +207,8 @@ public class SignUpInterface {
 
 		
 		//login button that sets new scene if credentials are valid
+		
+		
 		SignUpButton.setLayoutX(900);
 		SignUpButton.setLayoutY(250);
 		SignUpButton.setOnAction(e -> {
@@ -225,7 +243,7 @@ public class SignUpInterface {
 		    );
 
 		    // Success logic: after completing sign-up, navigate to next screen (login or app)
-		    login(primaryStage);
+		    login(primaryStage, role);
 		});
 		
 		
@@ -240,9 +258,31 @@ public class SignUpInterface {
 		layout.getChildren().addAll(label_ApplicationTitle, label_Username, text_UserName, label_Email, text_Email, label_Password, text_Password, label_PasswordConfirmation, text_PasswordConfirmation,
 				noInputFound, label_errPassword, errPassword, errPasswordPart3, validPassword,
 				label_Requirements, label_UpperCase, label_LowerCase, label_NumericDigit,
-				label_SpecialChar, label_LongEnough,  label_profficiencyChecker, label_javaFX, beginner, intermediate, advanced, expert, SignUpButton);
+				label_SpecialChar, label_LongEnough);
+				
+		//Setup Profficency Level Check boxes  here
 		
-		Scene signUpScene = new Scene(layout, 1000, 800);
+		if(role.equals("student") || role.equals("student-admin")) {
+			
+		VBox javaFxSection = createProficiencySection("JavaFX", JavaFX);
+		VBox astahSection = createProficiencySection("Astah", Astah);
+		VBox eclipseSection = createProficiencySection("Eclipse", Eclipse);
+		VBox gitSection = createProficiencySection("Git", Git);
+		VBox javaSection = createProficiencySection("Java", Java);
+		VBox scrumSection = createProficiencySection("Scrum", Scrum);
+		
+		layout.getChildren().addAll(label_profficiencyChecker, astahSection, eclipseSection, gitSection, javaSection, javaFxSection, scrumSection);
+		}
+		
+		layout.getChildren().add(SignUpButton);
+		
+		// Wrap the VBox in a ScrollPane
+		ScrollPane scrollPane = new ScrollPane(layout);
+		scrollPane.setFitToWidth(true); 
+		scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS); 
+
+		
+		Scene signUpScene = new Scene(scrollPane, 1000, 800);
 		primaryStage.setScene(signUpScene);
 		primaryStage.setTitle("Sign Up");
 	}
@@ -252,16 +292,14 @@ public class SignUpInterface {
 	 * As is: As long as the criteria for the sign up button are met, sends it to logged in page by creating new VBox.
 	 * NEEDS: To create an actual "logged in" or "main app" gui for most of the functionality, then send it there.
 	 */
-	private void login(Stage primaryStage) {
-	VBox appLayout = new VBox(10);
-	appLayout.setAlignment(Pos.CENTER);
-	
-	Label successfulSignUp = new Label("Successful Sign Up");
-	appLayout.getChildren().add(successfulSignUp);
-	
-	Scene appScene = new Scene(appLayout, 1000, 800);
-	primaryStage.setScene(appScene);
-	primaryStage.setTitle("App");
+	private void login(Stage primaryStage, String role) {
+		if(role.equals("admin-student") || role.equals("admin")) {
+			new AdminInterface(primaryStage);
+		} else if(role.equals("instructor")) {
+			new InstructorInterface(primaryStage);
+		} else {
+			new StudentInterface(primaryStage);
+		}
 	}
 	
 	/**********
@@ -305,6 +343,33 @@ public class SignUpInterface {
 		validPassword.setText("");
 		resetAssessments();				// Reset the flags for all of the assessment criteria
 		performEvaluation();			// Perform the evaluation to set all the assessment flags
+	}
+	
+	private VBox createProficiencySection(String labelText, ToggleGroup group) {
+	    Label label = new Label(labelText);
+	    label.setFont(Font.font("Arial", 14));
+	    
+	    RadioButton beginner = new RadioButton("Beginner");
+	    RadioButton intermediate = new RadioButton("Intermediate");
+	    RadioButton advanced = new RadioButton("Advanced");
+	    RadioButton expert = new RadioButton("Expert");
+	    
+	    beginner.setToggleGroup(group);
+	    intermediate.setToggleGroup(group);
+	    advanced.setToggleGroup(group);
+	    expert.setToggleGroup(group);
+
+	    // Arrange label and radio buttons in a VBox
+	    HBox buttonLayout  = new HBox(10);
+	    buttonLayout .setAlignment(Pos.CENTER_LEFT);
+	    buttonLayout .getChildren().addAll( beginner, intermediate, advanced, expert);
+	    
+	    VBox proficiencyLayout = new VBox(5);
+	    proficiencyLayout.setAlignment(Pos.CENTER_LEFT);
+	    proficiencyLayout.getChildren().addAll(label, buttonLayout);
+	    
+	    
+	    return proficiencyLayout;
 	}
 	
 

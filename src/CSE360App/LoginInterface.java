@@ -40,7 +40,7 @@ public class LoginInterface {
     
     
     private Button loginButton = new Button("Login");
-    
+	private Button logoutButton = new Button("Logout");
     
     /******
      * This method initializes all of the elements of the login GUI. 
@@ -150,15 +150,9 @@ public class LoginInterface {
      * @param primaryStage
      ***/
     private void proceedToLoggedIn(Stage primaryStage) {
-        VBox loggedInLayout = new VBox(10);
-        loggedInLayout.setAlignment(Pos.CENTER);
-        
-        Label welcomeLabel = new Label("Welcome! You are logged in!");
-        loggedInLayout.getChildren().add(welcomeLabel);
-        
-        Scene loggedInScene = new Scene(loggedInLayout, 400, 300);
-        primaryStage.setScene(loggedInScene);
-        primaryStage.setTitle("Logged In");
+    	logoutButton.setOnAction(e -> {
+    		new LoginInterface(primaryStage);
+    	});
     }
     
     //If the Invite Code is valid, send them to signUp GUI
@@ -171,7 +165,7 @@ public class LoginInterface {
      * @param primaryStage
      */
     private void proceedToSignUp(Stage primaryStage) {
-    	SignUpInterface signUpInterface = new SignUpInterface(primaryStage);
+    	SignUpInterface signUpInterface = new SignUpInterface(primaryStage, text_InviteCode.getText());
     	
     	
     }
