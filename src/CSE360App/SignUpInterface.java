@@ -194,17 +194,38 @@ public class SignUpInterface {
 		SignUpButton.setLayoutX(900);
 		SignUpButton.setLayoutY(250);
 		SignUpButton.setOnAction(e -> {
-			// Calls helper functions to validate that both username and password meet requirements
-			boolean passwordValid = performEvaluation();
-			boolean usernameValid = evaluateUsername();
-			boolean emailValid = evaluateEmail();
-			
-			if(passwordValid && usernameValid && emailValid)
-			{  // Only switch scene if password, username and email are valid
-				login(primaryStage);
-			} else {
-				errorMessage.setText("Invalid username or password");
-			}
+		    // Gather user input
+		    String username = text_UserName.getText();
+		    String password = text_Password.getText();
+		    String confirmPassword = text_PasswordConfirmation.getText();
+		    String email = text_Email.getText();
+		    String preferredFirstName = ""; // You can add this to the form later if needed
+
+		    // Basic validation
+		    if (username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() || email.isEmpty()) {
+		        errorMessage.setText("All fields must be filled.");
+		        return;
+		    }
+
+		    if (!password.equals(confirmPassword)) {
+		        errorMessage.setText("Passwords do not match.");
+		        return;
+		    }
+
+		    // Now call completeSignUp from AdminClass and pass in the form data
+		    // Invite code is empty as this example assumes direct user sign-up
+		    AdminClass.completeSignUp(
+		        "", // No invite code for now
+		        password.toCharArray(), 
+		        confirmPassword.toCharArray(), 
+		        username, 
+		        "", // Middle name (you can add this to the form if needed)
+		        "", // Last name (you can add this to the form if needed)
+		        preferredFirstName // You can add a field for this in the form
+		    );
+
+		    // Success logic: after completing sign-up, navigate to next screen (login or app)
+		    login(primaryStage);
 		});
 		
 		

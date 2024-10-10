@@ -141,6 +141,16 @@ public class AdminClass extends UserClass {
         }
         return null; // Return null if no user is found
     }
+    
+    public static UserClass findUserByEmail(String email) {
+        for (UserClass user : users) {
+            if (user.getEmail().equals(email)) {
+                return user;
+            }
+        }
+        return null; // Return null if no user is found
+    }
+
 
 
     
