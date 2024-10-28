@@ -41,6 +41,9 @@ public class LoginInterface {
     
     private Button loginButton = new Button("Login");
 	private Button logoutButton = new Button("Logout");
+	
+	private String user = "admin";
+	private String pass = "pass";
     
     /******
      * This method initializes all of the elements of the login GUI. 
@@ -92,7 +95,7 @@ public class LoginInterface {
             	 * As is: just checks if they're not empty
             	 * NEEDS: Actual verification with database of username and password.
             	 */
-            	proceedToLoggedIn(primaryStage);
+            	proceedToLoggedIn(primaryStage, text_UserName.getText());
             } else {
             	
             	//Otherwise, warns user of invalid username or password.
@@ -132,14 +135,21 @@ public class LoginInterface {
             return false;
         }
 
-        // Validate against stored users
-        UserClass foundUser = AdminClass.findUserByUsername(username);
-        if (foundUser != null && foundUser.validatePassword(password)) {
-            return true;
+        if(username.equalsIgnoreCase(user) && password.equalsIgnoreCase(pass)) {
+        	System.out.println("RETURNING TRUE");
+        	return true;
         } else {
-            errorMessage.setText("Invalid username or password");
-            return false;
+        	System.out.println("RETURNING falsev :(");
+        	return false;
         }
+        // Validate against stored users
+//        UserClass foundUser = AdminClass.findUserByUsername(username);
+//        if (foundUser != null && foundUser.validatePassword(password)) {
+//            return true;
+//        } else {
+//            errorMessage.setText("Invalid username or password");
+//            return false;
+//        }
     }
 
     
@@ -149,10 +159,11 @@ public class LoginInterface {
      * NEEDS: Once the main app GUI is built, send them there. (Will look like proceed to SignUp below).
      * @param primaryStage
      ***/
-    private void proceedToLoggedIn(Stage primaryStage) {
-    	logoutButton.setOnAction(e -> {
-    		new LoginInterface(primaryStage);
-    	});
+    private void proceedToLoggedIn(Stage primaryStage, String role) {
+    	ArticleInterface articleInterface = new ArticleInterface(primaryStage, role);
+//    	logoutButton.setOnAction(e -> {
+//    		new LoginInterface(primaryStage);
+//    	});
     }
     
     //If the Invite Code is valid, send them to signUp GUI
