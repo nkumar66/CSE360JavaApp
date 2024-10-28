@@ -20,7 +20,7 @@ public class Article {
 	/**************
 	 * Attributes
 	 **************/
-
+	private long id;
 	private String title;
 	private SkillLevel header;
 	private String SDescription;
@@ -121,6 +121,11 @@ public class Article {
 	}
 
 	// Below are just the getter & setter methods for each attribute.
+	
+	public long getId() {
+		return id;
+	}
+	
 	public String getTitle() {
 		return title;
 	}

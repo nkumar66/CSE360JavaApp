@@ -1,6 +1,11 @@
 
-package CSE360App;
+package CSE360App.GUI;
 
+import CSE360App.AdminClass;
+import CSE360App.PasswordEvaluationGUITestbed;
+import CSE360App.PasswordEvaluator;
+import CSE360App.GUI.Admin_Stuff.AdminInterface;
+import CSE360App.GUI.Student_Stuff.StudentInterface;
 // JavaFX imports needed to support the Graphical User Interface
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -294,7 +299,7 @@ public class SignUpInterface {
 	 */
 	private void login(Stage primaryStage, String role) {
 		if(role.equals("admin-student") || role.equals("admin")) {
-			new AdminInterface(primaryStage);
+			new AdminInterface(primaryStage, role);
 		} else if(role.equals("instructor")) {
 			new InstructorInterface(primaryStage);
 		} else {

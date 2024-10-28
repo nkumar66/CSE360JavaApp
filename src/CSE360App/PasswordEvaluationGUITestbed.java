@@ -1,5 +1,6 @@
 package CSE360App;
 
+import CSE360App.GUI.SignUpInterface;
 // JavaFX imports needed to support the Graphical User Interface
 import javafx.application.Application;
 import javafx.scene.Scene;

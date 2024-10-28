@@ -1,7 +1,12 @@
-package CSE360App;
+package CSE360App.GUI;
 
 import java.util.ArrayList;
 
+import CSE360App.Article;
+import CSE360App.SkillLevel;
+import CSE360App.GUI.Admin_Stuff.AdminInterface;
+import CSE360App.GUI.Admin_Stuff.backupInterface;
+import CSE360App.GUI.Login.LoginInterface;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -10,6 +15,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
@@ -23,6 +29,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.SelectionMode;
 
 /**
  * <p> ArticleInterface Class </p>
@@ -34,6 +41,7 @@ public class ArticleInterface {
 
 	// TEMP: Temporary array list of articles for GUI testing
 	private ArrayList<Article> articles = new ArrayList<>();
+	private ObservableList<Article> articleList = FXCollections.observableArrayList();
 	
 	// Serves as the collection of data / attributes that go into an article (Allows for easy formatting in GUI)
 	private TextFlow contentArea = new TextFlow();
@@ -44,7 +52,10 @@ public class ArticleInterface {
 
 	
 	// Button: Sends admin to settings page where they can backup, restore, add / delete, etc.
-	private Button returnButton = new Button("Admin Settings");
+	private Button settingsButton = new Button("Admin Settings");
+	private Button deleteArticles = new Button ("Delete Selected");
+	private Button backupArticles = new Button("Backup selected");
+	private Button signoutButton = new Button ("Signout");
 
 	
 	/**
@@ -59,21 +70,34 @@ public class ArticleInterface {
 		populateArticles();
 		
 		// JavaFX array list that allows the use of "listeners" which interacts with UI
-		ObservableList<String> articleTitles = FXCollections.observableArrayList();
-		for (Article article : articles) {
-			articleTitles.add(article.getTitle());
-		}
+		articleList.addAll(articles);
 
-		ListView<String> listView = new ListView<>(articleTitles);
+		ListView<Article> listView = new ListView<>(articleList);
 		listView.setPrefWidth(width * .2);
+		listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+		
+        /***
+         * The following code snippet just allows the listview to display the title rather than its own generated value
+         */
+        listView.setCellFactory(param -> new ListCell<Article>() {
+        	
+        	//Essentially just override what is displayed
+            @Override
+            protected void updateItem(Article item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.getTitle()); // Only display the title of the Article
+                }
+            }
+        });
 		
 		// The following section of code allows the ability to "select" articles by clicking them, which calls display article method
 		listView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-			if (newValue != null) {
-				Article selectedArticle = findArticleByTitle(newValue);
-				if (selectedArticle != null) {
-					displayArticle(selectedArticle);
-				}
+			if (newValue != null && listView.getSelectionModel().getSelectedItems().size() == 1) {
+					displayArticle(newValue);
+				
 			}
 		});
 		
@@ -96,40 +120,55 @@ public class ArticleInterface {
 		contentScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
 		layout.setCenter(contentScrollPane);
 
-		// **BOTTOM: Set buttons for users on bottom.
-		HBox bottomBox = new HBox(returnButton);
+		
+		// Box to format all content in the "BOTTOM" portion of BorderPane
+		HBox bottomBox = new HBox(10);
 		bottomBox.setAlignment(Pos.CENTER);
+		
+		// Shows role exclusive buttons.
+		if(role.equals("admin") || role.equals("student-admin") || role.equals("instructor")) {
+
+			bottomBox.getChildren().addAll(deleteArticles, backupArticles, settingsButton);
+		}
+		
+		// Every user gets sign out option.
+		bottomBox.getChildren().addAll(signoutButton);
 		layout.setBottom(bottomBox);
 
-		returnButton.setOnAction(e -> {
+		
+		// If role allows, sends user to settings page.
+		settingsButton.setOnAction(e -> {
 			switch (role) {
 			case "admin":
 			case "student-admin":
-				AdminInterface adminInterface = new AdminInterface(primaryStage);
+				AdminInterface adminInterface = new AdminInterface(primaryStage, role);
 			}
 		});
-
+		
+		// If role allows, deletes selected articles.
+		deleteArticles.setOnAction(e -> {
+			ObservableList<Article> selectedItems = listView.getSelectionModel().getSelectedItems();
+			deleteArticles(selectedItems);
+			updateListView();
+		});
+		
+		// If role allows, sends user to backup page.
+		backupArticles.setOnAction(e -> {
+			ObservableList<Article> selectedItems = listView.getSelectionModel().getSelectedItems();
+			backupInterface bckupInterface = new backupInterface(primaryStage, role, selectedItems);
+		});
+		
+		// Signs user out.
+		signoutButton.setOnAction(e -> {
+			LoginInterface loginInterface = new LoginInterface(primaryStage);
+		});
+		
+		
 		Scene articleScene = new Scene(layout, width, height);
 		primaryStage.setScene(articleScene);
 		primaryStage.setTitle("Article");
 	}
 
-	/**
-	 * findArticleByTitle: Function to search for articles
-	 * As-is: Just uses the title of the article for search
-	 * NEEDS: Definitely needs to be optimized to use some sort of key and more efficient searching method
-	 * @param title
-	 * @return
-	 */
-	private Article findArticleByTitle(String title) {
-		for (Article article : articles) {
-			if (article.getTitle().equalsIgnoreCase(title)) {
-				return article;
-			}
-		}
-
-		return null;
-	}
 
 	/**
 	 * displayArticle: Function that formats and displays every attribute of an article in the article viewer.
@@ -166,6 +205,29 @@ public class ArticleInterface {
 			contentArea.getChildren().addAll(titleText, headerText, descriptionText, keywordText, linksText, bodyText);
 		}
 	}
+	
+	/***
+	 * deleteArticles: Deletes articles that are selected by user / instructor.
+	 * As-is: Just removes then from temporary array list system.
+	 * NEEDS: Actual delete from DB logic.
+	 * @param selected
+	 */
+	private void deleteArticles(ObservableList<Article> selected) {
+		for(Article article : selected) {
+
+			if(article != null) {
+				System.out.printf("removing %s", article.getTitle());
+				articles.remove(article);
+			}
+		}
+	}
+	
+	/***
+	 * updateListView: Just updates the visual component of the list.
+	 */
+	private void updateListView() {
+		articleList.setAll(articles);
+	}
 
 	/***
 	 * populateArticles: TEMPORARY method that makes fake articles in order to create GUI
@@ -198,5 +260,7 @@ public class ArticleInterface {
 		articles.add(new Article("Title 6", genericSkill, genericShortDescription, genericKeywords, genericLinks,
 				"This is the content of Article 6."));
 	}
+	
+
 
 }

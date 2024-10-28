@@ -1,8 +1,10 @@
-package CSE360App;
+package CSE360App.GUI.Login;
 
 
 
 
+import CSE360App.GUI.ArticleInterface;
+import CSE360App.GUI.SignUpInterface;
 //JavaFX imports needed to support the Graphical User Interface
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -42,8 +44,11 @@ public class LoginInterface {
     private Button loginButton = new Button("Login");
 	private Button logoutButton = new Button("Logout");
 	
-	private String user = "admin";
+	private String adminuser = "admin";
 	private String pass = "pass";
+	
+	private String studentuser = "student";
+
     
     /******
      * This method initializes all of the elements of the login GUI. 
@@ -135,7 +140,7 @@ public class LoginInterface {
             return false;
         }
 
-        if(username.equalsIgnoreCase(user) && password.equalsIgnoreCase(pass)) {
+        if((username.equalsIgnoreCase(adminuser) || username.equalsIgnoreCase(studentuser)) && password.equalsIgnoreCase(pass)) {
         	System.out.println("RETURNING TRUE");
         	return true;
         } else {
