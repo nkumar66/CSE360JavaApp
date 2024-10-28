@@ -16,17 +16,19 @@ import javafx.stage.FileChooser;
 
 import javafx.stage.Stage;
 
-
 /**
- * <p> backupInterface Class </p>
+ * <p>
+ * backupInterface Class
+ * </p>
  * 
- * <p> Description: The GUI Component of backing up selected articles.
- * 	   				   	   
+ * <p>
+ * Description: The GUI Component of backing up selected articles.
+ * 
  */
 
 public class backupInterface {
-	
-	//Customizable window options
+
+	// Customizable window options
 	private int width = 1000;
 	private int height = 800;
 
@@ -36,19 +38,20 @@ public class backupInterface {
 	private Button returnSettings = new Button("Return to Settings");
 	private Button returnArticles = new Button("Return to Articles");
 
-	
 	/***
-	 * backupInterface: Serves as main GUI component for the back up of selected articles
-	 * As-is: Just serves as GUI shell
-	 * NEEDS: Actual logic for backing up to database.
+	 * backupInterface: Serves as main GUI component for the back up of selected
+	 * articles As-is: Just serves as GUI shell NEEDS: Actual logic for backing up
+	 * to database.
+	 * 
 	 * @param primaryStage
 	 * @param role
 	 * @param selectedItems
 	 */
 	public backupInterface(Stage primaryStage, String role, ObservableList<Article> selectedItems) {
 
-		/**	The section of code below creates a text field that is meant to be filled with an absolute path to a directory
-		 *	that will host where the back is stored. 	 
+		/**
+		 * The section of code below creates a text field that is meant to be filled
+		 * with an absolute path to a directory that will host where the back is stored.
 		 */
 		TextField filePath = new TextField();
 		filePath.setPromptText("Click 'Browse' to select the backup file.");
@@ -64,34 +67,32 @@ public class backupInterface {
 				filePath.setText(selectedDirectory.getAbsolutePath());
 			}
 		});
-		
-		
+
 		/***
 		 * This button just returns the user to the article page.
 		 */
 		returnArticles.setOnAction(e -> {
 			ArticleInterface articleInterface = new ArticleInterface(primaryStage, role);
 		});
-		
+
 		/***
 		 * This is the backup button, NEEDS DB LOGIC
 		 */
 		backupButton.setOnAction(e -> {
-			//ADD BACKUP LOGIC HERE!
-			
+			// ADD BACKUP LOGIC HERE!
+
 			System.out.println("you restored!");
 		});
 		HBox fileSelection = new HBox(10, filePath, browseButton, backupButton);
 		fileSelection.setAlignment(Pos.CENTER);
 		VBox layout = new VBox(10, fileSelection, returnArticles);
 		layout.setAlignment(Pos.CENTER);
-		
+
 		Scene scene = new Scene(layout, width, height);
-		
+
 		primaryStage.setScene(scene);
 		primaryStage.setTitle("Direcotry Search");
 		primaryStage.show();
 	}
-
 
 }

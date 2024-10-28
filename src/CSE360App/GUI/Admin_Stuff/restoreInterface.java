@@ -20,47 +20,45 @@ import javafx.stage.FileChooser;
 
 import javafx.stage.Stage;
 
-
 /**
- * <p> restoreInterface Class </p>
+ * <p>
+ * restoreInterface Class
+ * </p>
  * 
- * <p> Description: The GUI Component of restoring a file.
- * 	   				   	   
+ * <p>
+ * Description: The GUI Component of restoring a file.
+ * 
  */
 
-
 public class restoreInterface {
-	
-	//Customizable window options
+
+	// Customizable window options
 	private int width = 1000;
 	private int height = 800;
 
-	
 	// Button declarations
 	private Button browseButton = new Button("Browse");
 	private Button restoreButton = new Button("Restore");
 	private Button returnSettings = new Button("Return to Settings");
 	private Button returnArticles = new Button("Return to Articles");
-	
+
 	private ButtonType overwriteButton = new ButtonType("Overwrite");
 	private ButtonType mergeButton = new ButtonType("Merge");
-	
+
 	Alert alert = new Alert(AlertType.CONFIRMATION);
 
-
-	
 	/***
-	 * restoreInterface: Serves as main GUI component for the restoration of a specific file
-	 * As-is: Just serves as GUI shell
-	 * NEEDS: Actual restoration logic
+	 * restoreInterface: Serves as main GUI component for the restoration of a
+	 * specific file As-is: Just serves as GUI shell NEEDS: Actual restoration logic
+	 * 
 	 * @param primaryStage
 	 * @param role
 	 */
 	public restoreInterface(Stage primaryStage, String role) {
 
-		
-		/**	The section of code below creates a text field that is meant to be filled with an absolute path to a file
-		 *	that will holds the backup file. 	 
+		/**
+		 * The section of code below creates a text field that is meant to be filled
+		 * with an absolute path to a file that will holds the backup file.
 		 */
 		TextField filePath = new TextField();
 		filePath.setPromptText("Click 'Browse' to select the backup file.");
@@ -76,21 +74,19 @@ public class restoreInterface {
 				filePath.setText(selectedDirectory.getAbsolutePath());
 			}
 		});
-		
-		
+
 		/***
 		 * This button just returns the user to the article page.
 		 */
 		returnArticles.setOnAction(e -> {
 			ArticleInterface articleInterface = new ArticleInterface(primaryStage, role);
 		});
-		
-		
+
 		/***
 		 * This is the restore button, NEEDS DB LOGIC
 		 */
 		restoreButton.setOnAction(e -> {
-			//ADD RESTORE LOGIC HERE!
+			// ADD RESTORE LOGIC HERE!
 			confirmationDialog();
 			System.out.println("you restored!");
 		});
@@ -99,37 +95,35 @@ public class restoreInterface {
 		VBox layout = new VBox(10, fileSelection, returnArticles);
 		layout.setAlignment(Pos.CENTER);
 
-		
-		Scene scene = new Scene(layout, width / 2, height /2 );
-		
+		Scene scene = new Scene(layout, width / 2, height / 2);
+
 		primaryStage.setScene(scene);
 		primaryStage.setTitle("Direcotry Search");
 		primaryStage.show();
 	}
 
-	
 	/***
-	 * confirmationDialog: Prompts dialog box when user clicks "restore"
-	 * As-is: Just GUI component, presents two buttons and waits until one is pressed.
-	 * NEEDS: Actual logic for restoration.
+	 * confirmationDialog: Prompts dialog box when user clicks "restore" As-is: Just
+	 * GUI component, presents two buttons and waits until one is pressed. NEEDS:
+	 * Actual logic for restoration.
 	 */
 	public void confirmationDialog() {
 		alert.setTitle("Restore Options");
 		alert.setHeaderText("Choose Restore Option");
-	
+
 		alert.getButtonTypes().setAll(overwriteButton, mergeButton);
-		
+
 		Optional<ButtonType> result = alert.showAndWait();
-		
+
 		// Reacts based on which button is clicked.
-		if(result.isPresent()) {
-			if(result.get() == overwriteButton) {
+		if (result.isPresent()) {
+			if (result.get() == overwriteButton) {
 				System.out.println("Overwriting");
-			} else if(result.get() == mergeButton){
+			} else if (result.get() == mergeButton) {
 				System.out.println("Merging!");
 			}
 		}
-		
+
 	}
 
 }

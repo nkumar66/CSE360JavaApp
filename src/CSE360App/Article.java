@@ -22,6 +22,16 @@ public class Article {
 	 **************/
 	private long id;
 	private String title;
+	
+	
+	// Not really sure what header is supposed to look like? The description is a bit all over the place
+	/***
+	 * 
+	 * "a unique header including information such as the level of the article (e.g., beginner, intermediate, advanced, expert), 
+	 * grouping identifiers (so it is easy for the instructional team to update or delete a related set of articles), 
+	 * and other system information that might limit who can read the article for sensitive/restricted information"
+	 */
+	
 	private SkillLevel header;
 	private String SDescription;
 	private ArrayList<String> keywords;
