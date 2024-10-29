@@ -1,4 +1,4 @@
-package CSE360App;
+package src.CSE360App;
 import java.sql.*;
 
 import org.bouncycastle.util.Arrays;
