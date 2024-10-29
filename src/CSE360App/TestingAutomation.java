@@ -1,4 +1,4 @@
-package CSE360App;
+package src.CSE360App;
 
 import java.util.Arrays;
 import java.util.List;

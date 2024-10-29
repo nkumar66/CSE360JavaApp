@@ -1,6 +1,6 @@
-package CSE360App.GUI.Student_Stuff;
+package src.CSE360App.GUI.Student_Stuff;
 
-import CSE360App.GUI.Login.LoginInterface;
+import src.CSE360App.GUI.Login.LoginInterface;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;

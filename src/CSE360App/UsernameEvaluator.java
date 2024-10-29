@@ -1,4 +1,4 @@
-package CSE360App;
+package src.CSE360App;
 
 /* The following class evaluates whether or not a user inputted username meets the minimum length requirement.
  * 

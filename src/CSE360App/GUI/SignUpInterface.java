@@ -1,11 +1,11 @@
 
-package CSE360App.GUI;
+package src.CSE360App.GUI;
 
-import CSE360App.AdminClass;
-import CSE360App.PasswordEvaluationGUITestbed;
-import CSE360App.PasswordEvaluator;
-import CSE360App.GUI.Admin_Stuff.AdminInterface;
-import CSE360App.GUI.Student_Stuff.StudentInterface;
+import src.CSE360App.AdminClass;
+import src.CSE360App.PasswordEvaluationGUITestbed;
+import src.CSE360App.PasswordEvaluator;
+import src.CSE360App.GUI.Admin_Stuff.AdminInterface;
+import src.CSE360App.GUI.Student_Stuff.StudentInterface;
 // JavaFX imports needed to support the Graphical User Interface
 import javafx.geometry.Pos;
 import javafx.scene.Scene;

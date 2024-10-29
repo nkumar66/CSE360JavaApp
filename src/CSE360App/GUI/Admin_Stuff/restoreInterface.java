@@ -1,10 +1,10 @@
-package CSE360App.GUI.Admin_Stuff;
+package src.CSE360App.GUI.Admin_Stuff;
 
 import java.io.File;
 import java.util.Optional;
 
-import CSE360App.Article;
-import CSE360App.GUI.ArticleInterface;
+import src.CSE360App.Article;
+import src.CSE360App.GUI.ArticleInterface;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;

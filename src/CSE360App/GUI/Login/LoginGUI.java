@@ -1,4 +1,4 @@
-package CSE360App.GUI.Login;
+package src.CSE360App.GUI.Login;
 
 // JavaFX imports needed to support the Graphical User Interface
 import javafx.application.Application;

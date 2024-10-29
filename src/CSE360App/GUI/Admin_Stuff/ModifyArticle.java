@@ -1,6 +1,6 @@
-package CSE360App.GUI.Admin_Stuff;
+package src.CSE360App.GUI.Admin_Stuff;
 
-import CSE360App.GUI.ArticleInterface;
+import src.CSE360App.GUI.ArticleInterface;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;

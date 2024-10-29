@@ -1,13 +1,13 @@
-package CSE360App.GUI;
+package src.CSE360App.GUI;
 
 import java.util.ArrayList;
 
-import CSE360App.Article;
-import CSE360App.SkillLevel;
-import CSE360App.GUI.Admin_Stuff.AdminInterface;
-import CSE360App.GUI.Admin_Stuff.ModifyArticle;
-import CSE360App.GUI.Admin_Stuff.backupInterface;
-import CSE360App.GUI.Login.LoginInterface;
+import src.CSE360App.Article;
+import src.CSE360App.SkillLevel;
+import src.CSE360App.GUI.Admin_Stuff.AdminInterface;
+import src.CSE360App.GUI.Admin_Stuff.ModifyArticle;
+import src.CSE360App.GUI.Admin_Stuff.backupInterface;
+import src.CSE360App.GUI.Login.LoginInterface;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;

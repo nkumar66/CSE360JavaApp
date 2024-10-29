@@ -11,7 +11,7 @@
  * 	   Body					   	   
  */
 
-package CSE360App;
+package src.CSE360App;
 
 import java.util.ArrayList;
 

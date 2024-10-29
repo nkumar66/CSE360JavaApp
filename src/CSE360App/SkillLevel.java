@@ -1,4 +1,4 @@
-package CSE360App;
+package src.CSE360App;
 
 public enum SkillLevel {
 	BEGINNER,

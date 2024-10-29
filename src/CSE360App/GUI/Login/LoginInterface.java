@@ -1,7 +1,7 @@
-package CSE360App.GUI.Login;
+package src.CSE360App.GUI.Login;
 
-import CSE360App.GUI.ArticleInterface;
-import CSE360App.GUI.SignUpInterface;
+import src.CSE360App.GUI.ArticleInterface;
+import src.CSE360App.GUI.SignUpInterface;
 //JavaFX imports needed to support the Graphical User Interface
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
