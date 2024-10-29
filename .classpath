@@ -11,10 +11,7 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/brian/ASU-CSE360/H2/bin/h2-2.3.232.jar">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/karin/BouncyCastle-2.73.6/BouncyCastle-2.73.6/bcprov-lts8on-2.73.6.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/H2"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
