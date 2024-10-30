@@ -1,12 +1,12 @@
 package src.CSE360App.GUI.Admin_Stuff;
 
-import src.CSE360App.GUI.Login.LoginInterface;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import src.CSE360App.GUI.LoginInterface;
 
 public class AdminInterface {
 

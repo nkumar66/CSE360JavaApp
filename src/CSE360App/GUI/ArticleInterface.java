@@ -7,7 +7,6 @@ import src.CSE360App.SkillLevel;
 import src.CSE360App.GUI.Admin_Stuff.AdminInterface;
 import src.CSE360App.GUI.Admin_Stuff.ModifyArticle;
 import src.CSE360App.GUI.Admin_Stuff.backupInterface;
-import src.CSE360App.GUI.Login.LoginInterface;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -51,6 +50,8 @@ public class ArticleInterface {
 	// Serves as the collection of data / attributes that go into an article (Allows
 	// for easy formatting in GUI)
 	private TextFlow contentArea = new TextFlow();
+	
+	private TextField search = new TextField();
 
 	// Customizable window size for Article reader.
 	private int width = 1000;
@@ -79,10 +80,13 @@ public class ArticleInterface {
 
 		// JavaFX array list that allows the use of "listeners" which interacts with UI
 		articleList.addAll(articles);
-
+		search.setPromptText("Search");
 		ListView<Article> listView = new ListView<>(articleList);
-		listView.setPrefWidth(width * .2);
+		listView.setPrefWidth(width * .3);
 		listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+		
+		VBox articleListContainer = new VBox(10);
+		articleListContainer.getChildren().addAll(search, listView);
 
 		/***
 		 * The following code snippet just allows the listview to display the title
@@ -116,7 +120,7 @@ public class ArticleInterface {
 		layout.setPadding(new Insets(20));
 
 		// **LEFT: Set article list on left side of border pane
-		layout.setLeft(listView);
+		layout.setLeft(articleListContainer);
 
 		// Wraps the content of an article so that it allows for easier, uniform
 		// formatting
@@ -171,7 +175,7 @@ public class ArticleInterface {
 			Article selectedItem = listView.getSelectionModel().getSelectedItem();
 			if (selectedItem != null) {
 				ModifyArticle modifyArticle = new ModifyArticle(primaryStage, role, selectedItem.getTitle(),
-						selectedItem.getShortDescription(), selectedItem.getBody());
+						selectedItem.getAbstract(), selectedItem.getBody(), selectedItem.getKeywords(), selectedItem.getLinks());
 			}
 		});
 
@@ -186,6 +190,8 @@ public class ArticleInterface {
 		});
 
 		Scene articleScene = new Scene(layout, width, height);
+		articleScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+		layout.getStyleClass().add("root");
 		primaryStage.setScene(articleScene);
 		primaryStage.setTitle("Article");
 	}
@@ -201,7 +207,7 @@ public class ArticleInterface {
 
 		if (article != null) {
 			// TITLE
-			Text titleText = new Text(article.getTitle() + "\n\n");
+			Text titleText = new Text(article.getTitle() + "\n");
 			titleText.setFont(javafx.scene.text.Font.font("Arial", FontWeight.BOLD, 48));
 
 			// HEADER / SKILL LEVEL
@@ -209,7 +215,7 @@ public class ArticleInterface {
 			headerText.setFont(javafx.scene.text.Font.font("Arial", FontWeight.BOLD, FontPosture.ITALIC, 12));
 
 			// DESCRIPTION
-			Text descriptionText = new Text(article.getShortDescription() + "\n\n");
+			Text descriptionText = new Text(article.getAbstract() + "\n\n");
 			descriptionText.setFont(javafx.scene.text.Font.font("Arial", 12));
 
 			// KEYWORDS
