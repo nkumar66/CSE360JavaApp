@@ -1,0 +1,35 @@
+.button {
+    -fx-background-color: #78a1bb;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 10px;
+    -fx-border-radius: 10;
+    -fx-background-radius: 5;
+}
+
+.button:hover {
+    -fx-background-color: #6C90A8;
+}
+.root {
+
+	-fx-text-fill:  white ;
+}
+
+.label {
+	
+	-fx-font-family: "Arial";
+	
+}
+
+.label-padding {
+	    -fx-padding: 5px 10px 5px 10px; /* top, right, bottom, left */
+}
+
+.vbox {
+    -fx-background-color: 		#5A5A5A; /* White background */
+    -fx-padding: 15px;             /* Padding around the edges */
+    -fx-spacing: 10px;             /* Space between child nodes */
+    -fx-border-color: #CCCCCC;     /* Light gray border */
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+}

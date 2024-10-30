@@ -88,10 +88,10 @@ public class backupInterface {
 		VBox layout = new VBox(10, fileSelection, returnArticles);
 		layout.setAlignment(Pos.CENTER);
 
-		Scene scene = new Scene(layout, width, height);
-
+		Scene scene = new Scene(layout, width / 2, height / 2);
+//		scene.getStylesheets().add(getClass().getResource("/GUI/application.css").toExternalForm());
 		primaryStage.setScene(scene);
-		primaryStage.setTitle("Direcotry Search");
+		primaryStage.setTitle("Backup");
 		primaryStage.show();
 	}
 

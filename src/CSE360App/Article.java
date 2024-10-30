@@ -20,9 +20,7 @@ public class Article {
 	/**************
 	 * Attributes
 	 **************/
-	private long id;
-	private String title;
-	
+
 	
 	// Not really sure what header is supposed to look like? The description is a bit all over the place
 	/***
@@ -32,11 +30,18 @@ public class Article {
 	 * and other system information that might limit who can read the article for sensitive/restricted information"
 	 */
 	
-	private SkillLevel header;
-	private String SDescription;
+	private long id;
+	private String title;
+	private String publicTitle;
+	private String author;
+	private String Abstract; // abstract
+	private String public_Abstract;
+	private String body;
+	private SkillLevel skillLevel;
+	private AccessLevel accessLevel;
+	private String groupID;	
 	private ArrayList<String> keywords;
 	private ArrayList<String> links;
-	private String body;
 
 	/**
 	 * This method serves as the constructor for an article. As-is: Used generic
@@ -50,11 +55,11 @@ public class Article {
 	 * @param Links
 	 * @param body
 	 */
-	public Article(String title, SkillLevel header, String SDescription, ArrayList<String> keywords,
+	public Article(String title, SkillLevel skillLevel, String Abstract, ArrayList<String> keywords,
 			ArrayList<String> Links, String body) {
 		this.title = title;
-		this.header = header;
-		this.SDescription = SDescription;
+		this.skillLevel = skillLevel;
+		this.Abstract = Abstract;
 		this.keywords = keywords;
 		this.links = Links;
 		this.body = body;
@@ -67,10 +72,10 @@ public class Article {
 	 * 
 	 * @return Article's skill level as a string.
 	 */
-	public String getHeaderAsString() {
+	public String getSkillLevelAsString() {
 
 		String val;
-		switch (this.header) {
+		switch (this.skillLevel) {
 
 		case BEGINNER:
 			val = "Beginner";
@@ -143,7 +148,42 @@ public class Article {
 	public void setTitle(String newTitle) {
 		title = newTitle;
 	}
+	
+	public String getPublicTitle() {
+		return publicTitle;
+	}
+	
+	public void setPublicTitle(String newPublicTitle) {
+		publicTitle = newPublicTitle;
+	}
 
+	public String getAuthor( ) {
+		return author;
+	}
+	
+	public void setAuthor(String newAuthor) {
+		author = newAuthor;
+	}
+	
+	public String getAbstract() {
+		return Abstract;
+	}
+
+	public void setAbstract(String newDescription) {
+
+		Abstract = newDescription;
+	}
+
+	
+	public String getPublicAbstract() {
+		return public_Abstract;
+	}
+
+	public void setPublicAbstract(String newDescription) {
+
+		public_Abstract = newDescription;
+	}
+	
 	public String getBody() {
 		return body;
 	}
@@ -151,9 +191,11 @@ public class Article {
 	public void setBody(String newBody) {
 		body = newBody;
 	}
+	
+
 
 	public SkillLevel getSkillLevel() {
-		return header;
+		return skillLevel;
 	}
 
 	public void setSkillLevel(String newSkillLevel) {
@@ -185,16 +227,47 @@ public class Article {
 
 		}
 
-		header = val;
+		skillLevel = val;
 	}
 
-	public String getShortDescription() {
-		return SDescription;
+	public AccessLevel getAccessLevel() {
+		return accessLevel;
 	}
 
-	public void setShortDescription(String newDescription) {
+	public void setAccessLevel(String newAccessLevel) {
+		AccessLevel val;
 
-		SDescription = newDescription;
+		newAccessLevel = newAccessLevel.toLowerCase();
+
+		switch (newAccessLevel) {
+
+		case "public":
+			val = AccessLevel.PUBLIC;
+			break;
+
+		case "admin":
+			val = AccessLevel.ADMIN;
+			break;
+
+		case "instructor":
+			val = AccessLevel.INSTRUCTOR;
+			break;
+
+		default:
+			val = AccessLevel.PUBLIC;
+			break;
+
+		}
+
+		accessLevel = val;
+	}
+	
+	public String getGroupID() {
+		return groupID;
+	}
+	
+	public void setGroupID(String newID) {
+		groupID = newID;
 	}
 
 	public ArrayList<String> getKeywords() {

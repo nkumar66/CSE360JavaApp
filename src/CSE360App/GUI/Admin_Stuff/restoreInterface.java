@@ -41,6 +41,8 @@ public class restoreInterface {
 	private Button restoreButton = new Button("Restore");
 	private Button returnSettings = new Button("Return to Settings");
 	private Button returnArticles = new Button("Return to Articles");
+	
+	
 
 	private ButtonType overwriteButton = new ButtonType("Overwrite");
 	private ButtonType mergeButton = new ButtonType("Merge");
@@ -98,7 +100,7 @@ public class restoreInterface {
 		Scene scene = new Scene(layout, width / 2, height / 2);
 
 		primaryStage.setScene(scene);
-		primaryStage.setTitle("Direcotry Search");
+		primaryStage.setTitle("Restore Backup");
 		primaryStage.show();
 	}
 

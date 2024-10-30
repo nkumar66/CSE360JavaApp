@@ -1,7 +1,8 @@
-package src.CSE360App.GUI.Login;
+package src.CSE360App.GUI;
 
-import src.CSE360App.GUI.ArticleInterface;
-import src.CSE360App.GUI.SignUpInterface;
+import java.net.URL;
+
+import javafx.geometry.Insets;
 //JavaFX imports needed to support the Graphical User Interface
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -51,6 +52,9 @@ public class LoginInterface {
 
 	private String studentuser = "student";
 
+	
+	private int width = 400;
+	private int height = 300;
 	/******
 	 * This method initializes all of the elements of the login GUI.
 	 * 
@@ -61,6 +65,7 @@ public class LoginInterface {
 		// Used "Vbox" for easy centering
 		VBox layout = new VBox(10);
 		layout.setAlignment(Pos.CENTER);
+		layout.setPadding(new Insets(10));
 
 		// Set default fault and size for every label on login page.
 		label_ApplicationTitle.setFont(javafx.scene.text.Font.font("Arial", 24));
@@ -74,6 +79,8 @@ public class LoginInterface {
 		text_UserName.setPromptText("Username");
 		text_Password.setPromptText("Password");
 		text_InviteCode.setPromptText("Invite Code (optional)");
+		
+
 
 		// Login button action
 		/*
@@ -113,7 +120,18 @@ public class LoginInterface {
 				text_Password, label_InviteCode, text_InviteCode, loginButton, errorMessage);
 
 		// The code below builds the actual window for the app, customize as necessary.
-		Scene scene = new Scene(layout, 400, 300);
+		Scene scene = new Scene(layout, width, height);
+		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+
+
+
+		layout.getStyleClass().add("root");
+
+
+
+
+
+
 		primaryStage.setScene(scene);
 		primaryStage.setTitle("Login");
 		primaryStage.show();
