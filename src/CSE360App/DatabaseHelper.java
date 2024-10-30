@@ -29,34 +29,52 @@ class DatabaseHelper {
 		}
 	}
 	
+	// Creates articleTable and userTable
 	private void createTables() throws SQLException {
 	    String articleTable = "CREATE TABLE IF NOT EXISTS cse360articles ("
-	            + "id BIGINT AUTO_INCREMENT PRIMARY KEY, "      // Unique article ID
+	            + "id BIGINT AUTO_INCREMENT PRIMARY KEY, "   // Unique article ID
 	            + "title VARCHAR(255), "                     // Article title
 	            + "publicTitle VARCHAR(255)"				 // Title for public use
 	            + "author VARCHAR(255), "                    // Author's name
 	            + "abstract TEXT, "                          // Abstract for the article
 	            + "publicAbstract TEXT"						 // Abstract for public use
 	            + "body LONGTEXT, "                          // Full article body
-	            + "skillLevel VARCHAR(50), " 					 // Difficulty level
+	            + "skillLevel VARCHAR(50), " 				 // Difficulty level
 	            + "groupID VARCHAR(100), "                   // Group identifier for related articles
 	            + "accessLevel VARCHAR(50), " 				 // Access level for viewing
 	            + "createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " // Timestamp for article creation
 	            + "updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" // Timestamp for last update
 	            + ")";
+	    String userTable = "CREATE TABLE IF NOT EXISTS cse360users ("
+	    		+ "id INT AUTO-INCREMENT PRIMARY KEY, "		// Unique user ID
+	    		+ "user VARCHAR(255) UNIQUE"				// Username
+	    		+ "pass VARCHAR(255)"						// Password
+	    		+ "email VARCHAR(255)"						// Email
+	    		+ "firstName VARCHAR(255)"					// User First Name
+	    		+ "middleName VARCHAR(255)"					// User Middle Name
+	    		+ "lastName VARCHAR(255)"					// User Last Name
+	    		+ "preferredFirstName VARCHAR(255)"			// User preferred First Name
+	    		+ "isOTP BOOLEAN"							// If it is OTP password
+	    		+ "oneTimePassword VARCHAR(255)"			// Current OTP
+	    		+ "otpExpiration TIMESTAMP"					// When OTP expires
+	    		+ ")";
 	    statement.execute(articleTable);
+	    statement.execute(userTable);
 	}
 
-	public boolean isDatabaseEmpty() throws SQLException {		//function to check if the database is empty
-	    String query = "SELECT COUNT(*) AS count FROM cse360articles";
+	// Checks if the article database is empty
+	public boolean isArticleDatabaseEmpty() throws SQLException {
+	    String query = "SELECT COUNT(*) AS count FROM cse360articles"; // SQL Query
 	    ResultSet resultSet = statement.executeQuery(query);
 	    if (resultSet.next()) {
-	        return resultSet.getInt("count") == 0;
+	        return resultSet.getInt("count") == 0; // If there is an article, return true
 	    }
-	    return true;
+	    return true; // Else, return false
 	}
 	
+	// Takes in inputs for an article and inserts it into the database
 	public void addArticle(String title, String publicTitle, String author, String abstr, String publicAbstr, String body, SkillLevel skill, String groupID, AccessLevel access, Date currDate) throws SQLException {
+		// SQL query 
 		String insertArticle = "INSERT INTO cse360 (title, publicTitle, author, abstract, publicAbstract, body, skillLevel, groupID, accessLevel, createdAt, updatedAt) " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		try (PreparedStatement pstmt = connection.prepareStatement(insertArticle)){
 			pstmt.setString(1, title);
@@ -73,12 +91,13 @@ class DatabaseHelper {
 		}
 	}
 	
+	// Checks based on title if an article exists with that title
 	public boolean doesArticleExist(String title) {
-	    String query = "SELECT COUNT(*) FROM cse360articles WHERE title = ?";
+	    String query = "SELECT COUNT(*) FROM cse360articles WHERE title = ?"; // SQL query
 	    try (PreparedStatement pstmt = connection.prepareStatement(query)) {
 	        
 	        pstmt.setString(1, title);
-	        ResultSet rs = pstmt.executeQuery();
+	        ResultSet rs = pstmt.executeQuery(); // If there is a query/queries, it will show up in rs.
 	        
 	        if (rs.next()) {
 	            return rs.getInt(1) > 0;
@@ -89,7 +108,9 @@ class DatabaseHelper {
 	    return false;
 	}
 	
+	// Displays all the articles in the database
 	public void displayArticles() throws Exception {
+		// SQL query
 		String sql = "SELECT * FROM cse360articles"; 
 		Statement stmt = connection.createStatement();
 		ResultSet rs = stmt.executeQuery(sql); 
@@ -103,8 +124,11 @@ class DatabaseHelper {
 		 * IMPLEMENT DISPLAYING IN JAVAFX
 		 */
 	}
+	
+	// Edits the articles in whatever way
 	public void editArticles(long id, String title, String publicTitle, String author, String abstr, String publicAbstr, String body, SkillLevel skill, String groupID, AccessLevel access) throws Exception {
-	    String editSQL = "UPDATE articles SET title = ?, publicTitle = ?, author = ?, abstract = ?, publicAbstract = ?, body = ?, skillLevel = ?, groupID = ?, access_level = ?, updatedAt = CURRENT_TIMESTAMP WHERE id = ?";
+		// SQL query
+		String editSQL = "UPDATE articles SET title = ?, publicTitle = ?, author = ?, abstract = ?, publicAbstract = ?, body = ?, skillLevel = ?, groupID = ?, access_level = ?, updatedAt = CURRENT_TIMESTAMP WHERE id = ?";
 	    try (PreparedStatement pstmt = connection.prepareStatement(editSQL)){
 	    	pstmt.setString(1, title);
 	    	pstmt.setString(2, publicTitle);
@@ -118,6 +142,7 @@ class DatabaseHelper {
 	        pstmt.setLong(10, id);
 	        
 	        int rowsUpdated = pstmt.executeUpdate();
+	        // Checks and prints if the article was updated
 	        if (rowsUpdated > 0) {
 	        	System.out.println("Article updated successfully!");
 	        }
@@ -127,17 +152,149 @@ class DatabaseHelper {
 	    }
 	}
 	
+	// Finds article based upon ID and deletes it from database
 	public void deleteArticles(long id) throws SQLException {
-		String deleteArticle = "DELETE FROM cse360articles WHERE id ?";
+		String deleteArticle = "DELETE FROM cse360articles WHERE id ?"; // SQL query
 		try(PreparedStatement pstmt = connection.prepareStatement(deleteArticle)){
 			pstmt.setLong(1, id);
 			int rowsDeleted = pstmt.executeUpdate();
+			// Checks and prints if the article was deleted
 			if (rowsDeleted > 0) {
 				System.out.print("Article was succesfully deleted");
 			}
 			
 			else {
 				System.out.print("No article found with the given ID.");
+			}
+		}
+		catch(SQLException e){
+			e.printStackTrace();	
+			System.out.println("Error");
+		}
+	}
+	
+	// Searches articles by title and the substring for searching
+	public void searchArticlesByTitle(String titleSubstring) throws SQLException {
+		// SQL query
+	    String searchSQL = "SELECT * FROM cse360articles WHERE title LIKE ?";
+	    try (PreparedStatement pstmt = connection.prepareStatement(searchSQL)) {
+	        pstmt.setString(1, "%" + titleSubstring + "%");
+	        ResultSet rs = pstmt.executeQuery();
+	        while (rs.next()) {
+	            // HOW DO YOU WANT TO DISPLAY ?
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	}
+	
+	// Searches articles by author and the substring for searching
+	public void searchArticleByAuthor(String authorSubstring) {
+		// SQL query
+		String searchSQL = "SELECT * FROM cse360articles WHERE author LIKE ?";
+	    try (PreparedStatement pstmt = connection.prepareStatement(searchSQL)) {
+	        pstmt.setString(1, "%" + authorSubstring + "%");
+	        ResultSet rs = pstmt.executeQuery();
+	        while (rs.next()) {
+	            // HOW DO YOU WANT TO DISPLAY ?
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	}
+	
+	/*******
+	 * USER DATABASE METHODS
+	 */
+	
+	// Checks if the user database is empty
+	public boolean isUserDatabaseEmpty() throws SQLException {
+		String query = "SELECT COUNT(*) AS count FROM cse360users"; // SQL query
+	    ResultSet resultSet = statement.executeQuery(query);
+	    if (resultSet.next()) {
+	        return resultSet.getInt("count") == 0;
+	    }
+	    return true;
+	}
+	
+	// Changes password of user based upon the email
+	public void changePassword(String email, String newPass) throws SQLException {
+		String changeSQL = "UPDATE users SET pass = ? WHERE email = ?"; // SQL query
+		try(PreparedStatement pstmt = connection.prepareStatement(changeSQL)){
+			pstmt.setString(1, newPass);
+			pstmt.setString(2, email);
+			
+			int rowsUpdated = pstmt.executeUpdate();
+			// Checks and prints if password is updated
+			if(rowsUpdated > 0) {
+				System.out.println("Password updated successfully for email: " + email);
+			}
+			else {
+				System.out.println("No user found with the given email.");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	// Takes in input for a user and adds it to the database
+	public void addUser(String username, String password, String email, String firstName, String middleName, String lastName, String preferredFirstName, boolean isOTP, String oneTimePassword, Timestamp otpExpiration) throws SQLException {
+		if (doesUserExist(username)) {
+	        // PROMPT USER TO SELECT DIFFERENT USERNAME
+	        return;
+	    }
+		// SQL query
+		String addUserSQL = "INSERT INTO users (user, pass, email, firstName, middleName, lastName, preferredFirstName, isOTP, oneTimePassword, otpExpiration) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		try(PreparedStatement pstmt = connection.prepareStatement(addUserSQL)){
+			pstmt.setString(1, username);
+			pstmt.setString(2, password);
+			pstmt.setString(3, email);
+			pstmt.setString(4, firstName);
+			pstmt.setString(5, middleName);
+			pstmt.setString(6, lastName);	
+			pstmt.setString(7, preferredFirstName);
+			pstmt.setBoolean(8, isOTP);
+			pstmt.setString(9, oneTimePassword);
+			pstmt.setTimestamp(10, otpExpiration);
+			
+			int rowsUpdated = pstmt.executeUpdate();
+			if(rowsUpdated > 0) {
+				System.out.println("Password updated successfully for email: " + email);
+			}
+			else {
+				System.out.println("No user found with the given email.");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	// Checks if user with a certain username exists
+	private boolean doesUserExist(String username) throws SQLException {
+		// SQL query
+	    String checkUserSQL = "SELECT COUNT(*) FROM users WHERE user = ?";
+	    try (PreparedStatement pstmt = connection.prepareStatement(checkUserSQL)) {
+	        pstmt.setString(1, username);
+	        ResultSet rs = pstmt.executeQuery();
+	        if (rs.next()) {
+	            return rs.getInt(1) > 0;
+	        }
+	    }
+	    return false;
+	}
+	
+	// Deletes user using their email
+	public void deleteUser(String email) {
+		String deleteUserSQL = "DELETE FROM cse360users WHERE user ?"; // SQL query
+		try(PreparedStatement pstmt = connection.prepareStatement(deleteUserSQL)){
+			pstmt.setString(1, email);
+			int rowsDeleted = pstmt.executeUpdate();
+			if (rowsDeleted > 0) {
+				System.out.print("User was succesfully deleted");
+			}
+			
+			else {
+				System.out.print("No user found with the given email.");
 			}
 		}
 		catch(SQLException e){
