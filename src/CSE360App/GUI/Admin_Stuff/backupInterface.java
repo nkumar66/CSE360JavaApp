@@ -58,10 +58,10 @@ public class backupInterface {
 		filePath.setPrefWidth(.3 * width);
 
 		browseButton.setOnAction(e -> {
-			FileChooser fileChooser = new FileChooser();
-			fileChooser.setTitle("Select a File");
+			DirectoryChooser fileChooser = new DirectoryChooser();
+			fileChooser.setTitle("Select a Directory");
 
-			File selectedDirectory = fileChooser.showOpenDialog(primaryStage);
+			File selectedDirectory = fileChooser.showDialog(primaryStage);
 
 			if (selectedDirectory != null) {
 				filePath.setText(selectedDirectory.getAbsolutePath());

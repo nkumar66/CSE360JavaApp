@@ -309,12 +309,12 @@ public class SignUpInterface {
 	 * in" or "main app" gui for most of the functionality, then send it there.
 	 */
 	private void login(Stage primaryStage, String role) {
-		if (role.equals("admin-student") || role.equals("admin")) {
-			new AdminInterface(primaryStage, role);
+		if (role.equals("admin-student") || role.equals("admin") ) {
+			new ArticleInterface(primaryStage, "admin");
 		} else if (role.equals("instructor")) {
-			new InstructorInterface(primaryStage);
+			new ArticleInterface(primaryStage, role);
 		} else {
-			new StudentInterface(primaryStage);
+			new ArticleInterface(primaryStage, role);
 		}
 	}
 

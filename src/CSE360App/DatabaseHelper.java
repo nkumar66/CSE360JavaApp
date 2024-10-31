@@ -14,8 +14,9 @@ class DatabaseHelper {
 	static final String USER = "sa"; 
 	static final String PASS = ""; 
 	
+	Statement statement;
+	
 	private Connection connection = null;		//to identify the connection
-	private Statement statement = null; 		//to enter a statement to receive data from the SQL tables
 	
 	public void connectToDataBase() throws SQLException {
 		try {

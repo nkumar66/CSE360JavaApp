@@ -139,9 +139,11 @@ public class ArticleInterface {
 		bottomBox.setAlignment(Pos.CENTER);
 
 		// Shows role exclusive buttons.
-		if (role.equals("admin") || role.equals("student-admin") || role.equals("instructor")) {
+		if (role.equals("admin") || role.equals("student-admin") ) {
 
 			bottomBox.getChildren().addAll(deleteArticles, backupArticles, addArticle, modifyArticle, settingsButton);
+		} else if (role.equals("instructor")) {
+			bottomBox.getChildren().addAll(deleteArticles,  addArticle, modifyArticle);
 		}
 
 		// Every user gets sign out option.
