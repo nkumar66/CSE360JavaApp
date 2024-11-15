@@ -1,4 +1,5 @@
 package src.CSE360App;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserClass {
@@ -28,6 +29,8 @@ public class UserClass {
     }
     
 
+
+    
     public String getEmail() {			//to return an email
         return email;
     }
@@ -89,7 +92,34 @@ public class UserClass {
     }
 
 
+	/***
+	 * populateArticles: TEMPORARY method that makes fake articles in order to
+	 * create GUI As-is: Just makes fake articles with default attributes Needs:
+	 * real articles
+	 */
+	public static void populateUsers(ArrayList<UserClass> users) {
+		
+		String password = "pass";
+		String OTP = "pass";
+		String email = "@asu.com";
+		
+		char[] pass = password.toCharArray();
+		List<String> admin = new ArrayList<>();
+		admin.add("admin");
+		List<String> instructor = new ArrayList<>();
+		instructor.add("instructor");		
+		List<String> student = new ArrayList<>();
+		student.add("student");	
+		
+		
+		users.add(new UserClass("Brian123", pass, false, "Brian", "B.","Venegas", "Brian", "brian" + email, admin));
+		users.add(new UserClass("Adrian456", pass, false, "Adrian", "","Sotelo", "Adrian", "adrian" + email, instructor));
+		users.add(new UserClass("Saul789", pass, false, "Saul", "J.","Jimenez", "Saul", "saul" + email, student));
+		users.add(new UserClass("Joseph987", pass, false, "Joseph", "","Guerrero", "Joey", "joseph" + email, admin));
+		users.add(new UserClass("Yaire852", pass, false, "Yaire", "","Estrada", "Yaire", "yaire" + email, admin));
+		users.add(new UserClass("Danny951", pass, false, "Daniel", "","Martinez", "Danny", "danny" + email, admin));
 
+	}
 
 
 }

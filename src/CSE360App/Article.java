@@ -293,5 +293,38 @@ public class Article {
 	public void addLink(String newLink) {
 		links.add(newLink);
 	}
+	
+	
+	/***
+	 * populateArticles: TEMPORARY method that makes fake articles in order to
+	 * create GUI As-is: Just makes fake articles with default attributes Needs:
+	 * real articles
+	 */
+	public static void populateArticles(ArrayList<Article> articles) {
+
+		SkillLevel genericSkill = SkillLevel.BEGINNER;
+		String genericShortDescription = "This is a short description.";
+		ArrayList<String> genericKeywords = new ArrayList<>();
+		genericKeywords.add("Keyword 1");
+		genericKeywords.add("Keyword 2");
+		genericKeywords.add("Keyword 3");
+		ArrayList<String> genericLinks = new ArrayList<>();
+		genericLinks.add("Link 1");
+		genericLinks.add("Link 2");
+		genericLinks.add("Link 3");
+
+		articles.add(new Article("Title 1", genericSkill, genericShortDescription, genericKeywords, genericLinks,
+				"This is the content of Article 1."));
+		articles.add(new Article("Title 2", genericSkill, genericShortDescription, genericKeywords, genericLinks,
+				"This is the content of Article 2."));
+		articles.add(new Article("Title 3", genericSkill, genericShortDescription, genericKeywords, genericLinks,
+				"This is the content of Article 3."));
+		articles.add(new Article("Title 4", genericSkill, genericShortDescription, genericKeywords, genericLinks,
+				"This is the content of Article 4."));
+		articles.add(new Article("Title 5", genericSkill, genericShortDescription, genericKeywords, genericLinks,
+				"This is the content of Article 5."));
+		articles.add(new Article("Title 6", genericSkill, genericShortDescription, genericKeywords, genericLinks,
+				"This is the content of Article 6."));
+	}
 
 }

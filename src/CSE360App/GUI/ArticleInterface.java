@@ -7,6 +7,7 @@ import src.CSE360App.SkillLevel;
 import src.CSE360App.GUI.Admin_Stuff.AdminInterface;
 import src.CSE360App.GUI.Admin_Stuff.ModifyArticle;
 import src.CSE360App.GUI.Admin_Stuff.backupInterface;
+import src.CSE360App.GUI.Group_GUI.GroupInterface;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -65,6 +66,7 @@ public class ArticleInterface {
 	private Button signoutButton = new Button("Sign out");
 	private Button addArticle = new Button("Add Article");
 	private Button modifyArticle = new Button("Modify Selected Article");
+	private Button GroupSettings = new Button("Group Settings");
 
 	/**
 	 * ArticleInterface: Window that shows all articles on left with title and
@@ -76,7 +78,7 @@ public class ArticleInterface {
 	public ArticleInterface(Stage primaryStage, String role) {
 
 		// TEMP: Populates fake articles for sake of testing GUI
-		populateArticles();
+		Article.populateArticles(articles);
 
 		// JavaFX array list that allows the use of "listeners" which interacts with UI
 		articleList.addAll(articles);
@@ -141,9 +143,9 @@ public class ArticleInterface {
 		// Shows role exclusive buttons.
 		if (role.equals("admin") || role.equals("student-admin") ) {
 
-			bottomBox.getChildren().addAll(deleteArticles, backupArticles, addArticle, modifyArticle, settingsButton);
+			bottomBox.getChildren().addAll(deleteArticles, backupArticles, addArticle, modifyArticle, settingsButton, GroupSettings);
 		} else if (role.equals("instructor")) {
-			bottomBox.getChildren().addAll(deleteArticles,  addArticle, modifyArticle);
+			bottomBox.getChildren().addAll(deleteArticles,  addArticle, modifyArticle, GroupSettings);
 		}
 
 		// Every user gets sign out option.
@@ -179,6 +181,10 @@ public class ArticleInterface {
 				ModifyArticle modifyArticle = new ModifyArticle(primaryStage, role, selectedItem.getTitle(),
 						selectedItem.getAbstract(), selectedItem.getBody(), selectedItem.getKeywords(), selectedItem.getLinks());
 			}
+		});
+		
+		GroupSettings.setOnAction(e -> {
+			GroupInterface groupInterface = new GroupInterface(primaryStage, role);
 		});
 
 		// If role allows, send user to page to create article.
@@ -260,36 +266,6 @@ public class ArticleInterface {
 		articleList.setAll(articles);
 	}
 
-	/***
-	 * populateArticles: TEMPORARY method that makes fake articles in order to
-	 * create GUI As-is: Just makes fake articles with default attributes Needs:
-	 * real articles
-	 */
-	private void populateArticles() {
 
-		SkillLevel genericSkill = SkillLevel.BEGINNER;
-		String genericShortDescription = "This is a short description.";
-		ArrayList<String> genericKeywords = new ArrayList<>();
-		genericKeywords.add("Keyword 1");
-		genericKeywords.add("Keyword 2");
-		genericKeywords.add("Keyword 3");
-		ArrayList<String> genericLinks = new ArrayList<>();
-		genericLinks.add("Link 1");
-		genericLinks.add("Link 2");
-		genericLinks.add("Link 3");
-
-		articles.add(new Article("Title 1", genericSkill, genericShortDescription, genericKeywords, genericLinks,
-				"This is the content of Article 1."));
-		articles.add(new Article("Title 2", genericSkill, genericShortDescription, genericKeywords, genericLinks,
-				"This is the content of Article 2."));
-		articles.add(new Article("Title 3", genericSkill, genericShortDescription, genericKeywords, genericLinks,
-				"This is the content of Article 3."));
-		articles.add(new Article("Title 4", genericSkill, genericShortDescription, genericKeywords, genericLinks,
-				"This is the content of Article 4."));
-		articles.add(new Article("Title 5", genericSkill, genericShortDescription, genericKeywords, genericLinks,
-				"This is the content of Article 5."));
-		articles.add(new Article("Title 6", genericSkill, genericShortDescription, genericKeywords, genericLinks,
-				"This is the content of Article 6."));
-	}
 
 }
