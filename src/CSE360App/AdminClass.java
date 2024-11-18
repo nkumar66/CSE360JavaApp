@@ -1,5 +1,6 @@
 package src.CSE360App;
 import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.HashMap;
@@ -160,6 +161,37 @@ public class AdminClass extends UserClass {
 
 
 
+	/***
+	 * populateAdmins: TEMPORARY method that makes fake admins in order to
+	 * create GUI As-is: Just makes fake admins with default attributes Needs:
+	 * real articles
+	 */
+	public static void populateAdmins(ArrayList<AdminClass> admins) {
+		
+		String password = "pass";
+		String OTP = "pass";
+		String email = "@asu.com";
+		
+		char[] pass = password.toCharArray();
+		List<String> admin = new ArrayList<>();
+		admin.add("admin");
+		List<String> instructor = new ArrayList<>();
+		instructor.add("instructor");		
+		List<String> student = new ArrayList<>();
+		student.add("student");	
+		
+		
+		admins.add(new AdminClass("Admin123", pass, false, "Brian", "B.","Venegas", "Brian", "brian" + email, admin));
+		admins.add(new AdminClass("Admin456", pass, false, "Adrian", "","Sotelo", "Adrian", "adrian" + email, admin));
+		admins.add(new AdminClass("Admin789", pass, false, "Saul", "J.","Jimenez", "Saul", "saul" + email, admin));
+		admins.add(new AdminClass("Admin987", pass, false, "Joseph", "","Guerrero", "Joey", "joseph" + email, admin));
+		admins.add(new AdminClass("Admin852", pass, false, "Yaire", "","Estrada", "Yaire", "yaire" + email, admin));
+		admins.add(new AdminClass("Admin951", pass, false, "Daniel", "","Martinez", "Danny", "danny" + email, admin));
+
+	
+}
+    
+    
     
     
 }

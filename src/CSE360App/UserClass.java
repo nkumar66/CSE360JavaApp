@@ -93,9 +93,9 @@ public class UserClass {
 
 
 	/***
-	 * populateArticles: TEMPORARY method that makes fake articles in order to
-	 * create GUI As-is: Just makes fake articles with default attributes Needs:
-	 * real articles
+	 * populateUsers: TEMPORARY method that makes fake users in order to
+	 * create GUI As-is: Just makes fake articles with default attributes Needs: real users
+	 * **Currently set to make all instructors**
 	 */
 	public static void populateUsers(ArrayList<UserClass> users) {
 		
@@ -112,12 +112,12 @@ public class UserClass {
 		student.add("student");	
 		
 		
-		users.add(new UserClass("Brian123", pass, false, "Brian", "B.","Venegas", "Brian", "brian" + email, admin));
-		users.add(new UserClass("Adrian456", pass, false, "Adrian", "","Sotelo", "Adrian", "adrian" + email, instructor));
-		users.add(new UserClass("Saul789", pass, false, "Saul", "J.","Jimenez", "Saul", "saul" + email, student));
-		users.add(new UserClass("Joseph987", pass, false, "Joseph", "","Guerrero", "Joey", "joseph" + email, admin));
-		users.add(new UserClass("Yaire852", pass, false, "Yaire", "","Estrada", "Yaire", "yaire" + email, admin));
-		users.add(new UserClass("Danny951", pass, false, "Daniel", "","Martinez", "Danny", "danny" + email, admin));
+		users.add(new UserClass("Instructor123", pass, false, "Brian", "B.","Venegas", "Brian", "brian" + email, instructor));
+		users.add(new UserClass("Instructor456", pass, false, "Adrian", "","Sotelo", "Adrian", "adrian" + email, instructor));
+		users.add(new UserClass("Instructor789", pass, false, "Saul", "J.","Jimenez", "Saul", "saul" + email, instructor));
+		users.add(new UserClass("Instructor987", pass, false, "Joseph", "","Guerrero", "Joey", "joseph" + email, instructor));
+		users.add(new UserClass("Instructor852", pass, false, "Yaire", "","Estrada", "Yaire", "yaire" + email, instructor));
+		users.add(new UserClass("Instructor951", pass, false, "Daniel", "","Martinez", "Danny", "danny" + email, instructor));
 
 	}
 

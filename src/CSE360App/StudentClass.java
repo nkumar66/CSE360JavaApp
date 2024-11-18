@@ -1,5 +1,6 @@
 package src.CSE360App;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,4 +49,37 @@ public class StudentClass extends UserClass {
     public static String[] getSkills() {		//getter for skills
         return skills;
     }
+    
+    
+    
+    
+    
+	/***
+	 * populateStudents: TEMPORARY method that makes fake students in order to
+	 * create GUI As-is: Just makes fake students with default attributes Needs:
+	 * real articles
+	 */
+	public static void populateStudents(ArrayList<StudentClass> students) {
+		
+		String password = "pass";
+		String OTP = "pass";
+		String email = "@asu.com";
+		
+		char[] pass = password.toCharArray();
+		List<String> admin = new ArrayList<>();
+		admin.add("admin");
+		List<String> instructor = new ArrayList<>();
+		instructor.add("instructor");		
+		List<String> student = new ArrayList<>();
+		student.add("student");	
+		
+		
+		students.add(new StudentClass("Brian123", pass, false, "Brian", "B.","Venegas", "Brian", "brian" + email, student));
+		students.add(new StudentClass("Adrian456", pass, false, "Adrian", "","Sotelo", "Adrian", "adrian" + email, student));
+		students.add(new StudentClass("Saul789", pass, false, "Saul", "J.","Jimenez", "Saul", "saul" + email, student));
+		students.add(new StudentClass("Joseph987", pass, false, "Joseph", "","Guerrero", "Joey", "joseph" + email, student));
+		students.add(new StudentClass("Yaire852", pass, false, "Yaire", "","Estrada", "Yaire", "yaire" + email, student));
+		students.add(new StudentClass("Danny951", pass, false, "Daniel", "","Martinez", "Danny", "danny" + email, student));
+
+	}
 }
