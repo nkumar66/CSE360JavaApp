@@ -4,13 +4,15 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import src.CSE360App.GroupAccess;
 import src.CSE360App.GUI.ArticleInterface;
 import javafx.scene.control.Button;
 
 public class GroupInterface {
 
 	private Button returnButton = new Button("Return");
-	private Button createGroupButton = new Button("Create Group");
+	private Button createSpecialGroupButton = new Button("Create Special Group");
+	private Button createGeneralGroupButton = new Button("Create General Group");
 	private Button editGroup = new Button("Edit Group");
 	private Button removeGroup = new Button("Remove Group");
 
@@ -24,11 +26,15 @@ public class GroupInterface {
 			ArticleInterface articleInterface = new ArticleInterface(primaryStage, role);
 		});
 
-		createGroupButton.setOnAction(e -> {
-			CreateGroup createGroup = new CreateGroup(primaryStage, role);
+		createSpecialGroupButton.setOnAction(e -> {
+			CreateGroup createGroup = new CreateGroup(primaryStage, role, GroupAccess.SPECIAL);
+		});
+		
+		createGeneralGroupButton.setOnAction(e -> {
+			CreateGroup createGroup = new CreateGroup(primaryStage, role, GroupAccess.GENERAL);
 		});
 
-		layout.getChildren().addAll(returnButton, createGroupButton, editGroup, removeGroup);
+		layout.getChildren().addAll(returnButton, createSpecialGroupButton, createGeneralGroupButton, editGroup, removeGroup);
 
 	}
 }

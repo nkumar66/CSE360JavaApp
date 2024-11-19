@@ -16,6 +16,7 @@
 package src.CSE360App;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class Group {
 
@@ -23,9 +24,9 @@ public class Group {
 	String name;
 	ArrayList<Article> articles;
 	ArrayList<String> defaultRights;
-	ArrayList<AdminClass> admins;
-	ArrayList<UserClass> instructors; // <--- Will hold first instructor and other instructors w/ their permissions.
-	ArrayList<StudentClass> students;
+	Map<AdminClass, ArrayList<String>> admins;
+	Map<UserClass, ArrayList<String>> instructors; // <--- Will hold first instructor and other instructors w/ their permissions.
+	Map<StudentClass, ArrayList<String>> students;
 	
 	
 	/***
@@ -37,10 +38,9 @@ public class Group {
 	 * @param instructors
 	 * @param students
 	 */
-	public Group(String name, ArrayList<Article> articles, ArrayList<String> defaultRights, ArrayList<AdminClass> admins, ArrayList<UserClass> instructors, ArrayList<StudentClass> students) {
+	public Group(String name, ArrayList<Article> articles,  Map<AdminClass, ArrayList<String>>  admins, Map<UserClass, ArrayList<String>> instructors, Map<StudentClass, ArrayList<String>> students) {
 		this.name = name;
 		this.articles = articles;
-		this.defaultRights = defaultRights;
 		this.admins = admins;
 		this.instructors = instructors;
 		this.students = students;
