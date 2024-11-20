@@ -14,6 +14,10 @@
 package src.CSE360App;
 
 import java.util.ArrayList;
+import java.util.Objects;
+
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 
 public class Article {
 
@@ -293,6 +297,50 @@ public class Article {
 	public void addLink(String newLink) {
 		links.add(newLink);
 	}
+	
+	
+	/***
+	 * setColumnArticleAttributes: Helper method that defaults all user-based
+	 * selectable lists to display by article title
+	 * 
+	 * @param <T>
+	 * @param listView
+	 */
+	public static <T extends Article> void setColumnArticleAttributes(ListView<T> listView) {
+		listView.setCellFactory(param -> new ListCell<T>() {
+
+			// Essentially just override what is displayed
+			@Override
+			protected void updateItem(T item, boolean empty) {
+				super.updateItem(item, empty);
+				if (empty || item == null) {
+					setText(null);
+				} else {
+					setText(item.getTitle()); // Only display the title of the Article
+				}
+			}
+		});
+	}
+
+	
+	/***
+	 * This overrides the equals operator so that it compares articles by titles 
+	 * NEEDS: CHANGE THIS TO COMPARE IDS W/ DATABASE
+	 * 
+	 */
+	@Override
+	public boolean equals(Object o) {
+	    if (this == o) return true; // Same reference
+	    if (o == null || getClass() != o.getClass()) return false; // Null or different class
+	    Article article = (Article) o; 
+	    return this.title.equals(article.title); // Compare unique attribute
+	}
+
+	@Override
+	public int hashCode() {
+	    return Objects.hash(title); // Use the same attribute as in equals()
+	}
+
 	
 	
 	/***

@@ -1,3 +1,10 @@
+/**
+ * <p> Group Interface Class </p>
+ * 
+ * <p> Description: The Group Interface serves as the main menu for Group related tasks.
+ * 	   				   	   
+ */
+
 package src.CSE360App.GUI.Group_GUI;
 
 import javafx.geometry.Pos;
@@ -10,6 +17,7 @@ import javafx.scene.control.Button;
 
 public class GroupInterface {
 
+	// Buttons
 	private Button returnButton = new Button("Return");
 	private Button createSpecialGroupButton = new Button("Create Special Group");
 	private Button createGeneralGroupButton = new Button("Create General Group");
@@ -27,11 +35,19 @@ public class GroupInterface {
 		});
 
 		createSpecialGroupButton.setOnAction(e -> {
-			CreateGroup createGroup = new CreateGroup(primaryStage, role, GroupAccess.SPECIAL);
+			CreateGroup createGroup = new CreateGroup(primaryStage, role, GroupAccess.SPECIAL, null);
 		});
 		
 		createGeneralGroupButton.setOnAction(e -> {
-			CreateGroup createGroup = new CreateGroup(primaryStage, role, GroupAccess.GENERAL);
+			CreateGroup createGroup = new CreateGroup(primaryStage, role, GroupAccess.GENERAL, null);
+		});
+		
+		editGroup.setOnAction(e -> {
+		    new GroupList(primaryStage, role, "edit");
+		});
+
+		removeGroup.setOnAction(e -> {
+		    new GroupList(primaryStage, role, "remove");
 		});
 
 		layout.getChildren().addAll(returnButton, createSpecialGroupButton, createGeneralGroupButton, editGroup, removeGroup);
