@@ -175,9 +175,9 @@ class DatabaseHelper {
 	}
 	
 	// Searches articles by title and the substring for searching
-	public void searchArticlesByTitle(String titleSubstring) throws SQLException {
+	public void searchArticlesByTitle(String titleSubstring, String filter) throws SQLException {
 		// SQL query
-	    String searchSQL = "SELECT * FROM cse360articles WHERE title LIKE ?";
+	    String searchSQL = "SELECT * FROM cse360articles WHERE title LIKE ? AND skillLevel = ?";
 	    try (PreparedStatement pstmt = connection.prepareStatement(searchSQL)) {
 	        pstmt.setString(1, "%" + titleSubstring + "%");
 	        ResultSet rs = pstmt.executeQuery();
@@ -192,7 +192,7 @@ class DatabaseHelper {
 	// Searches articles by author and the substring for searching
 	public void searchArticleByAuthor(String authorSubstring) {
 		// SQL query
-		String searchSQL = "SELECT * FROM cse360articles WHERE author LIKE ?";
+		String searchSQL = "SELECT * FROM cse360articles WHERE author LIKE ? AND skillLevel = ?";
 	    try (PreparedStatement pstmt = connection.prepareStatement(searchSQL)) {
 	        pstmt.setString(1, "%" + authorSubstring + "%");
 	        ResultSet rs = pstmt.executeQuery();
