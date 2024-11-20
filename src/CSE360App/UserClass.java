@@ -8,6 +8,8 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 
 public class UserClass {
+	
+	
 	private String username;
 	private char[] password;
 	private boolean isOTP;
@@ -107,8 +109,9 @@ public class UserClass {
 				super.updateItem(item, empty);
 				if (empty || item == null) {
 					setText(null);
-				} else {
-					setText("Username: " + item.getUsername() + " Role: " + item.getRoles().get(0));
+				} else {					
+				int index = listView.getItems().indexOf(item) + 1;
+				setText(index + ". " + "Username: " + item.getUsername() + " Role: " + item.getRoles().get(0));
 				}
 			}
 		});

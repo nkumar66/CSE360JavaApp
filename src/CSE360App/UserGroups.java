@@ -129,8 +129,9 @@ public class UserGroups {
 				super.updateItem(item, empty);
 				if (empty || item == null) {
 					setText(null);
-				} else {
-					setText("Group Name: " + item.getGroupName());
+				} else {					
+				int index = listView.getItems().indexOf(item) + 1;
+				setText(index + ". " + "Group Name: " + item.getGroupName());
 				}
 			}
 		});

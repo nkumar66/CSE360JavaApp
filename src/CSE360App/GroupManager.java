@@ -41,6 +41,11 @@ public class GroupManager {
         }
     }
 
+    /***
+     * getGroupByID: Returns the group object of the matching ID
+     * @param id
+     * @return
+     */
     public static UserGroups getGroupByID(long id) {
         for (UserGroups group : groups) { // assuming groupsList is your list of groups
             if (group.getID() == id) {
@@ -49,4 +54,21 @@ public class GroupManager {
         }
         return null; // Return null if no group is found with the title
     }
+    
+    /***
+     * getGroupIDbyName: Finds ID of the group given a name
+     * @param groupName
+     * @return
+     */
+    public static Integer getGroupIdByName(String groupName) {
+        System.out.println("Looking for group name: " + groupName);
+        for (UserGroups group : groups) {
+            System.out.println("Checking group: " + group.getGroupName());
+            if (group.getGroupName().equalsIgnoreCase(groupName)) {
+                return (int) group.getID();
+            }
+        }
+        return null; // Not found
+    }
+
 }

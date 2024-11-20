@@ -171,7 +171,9 @@ public class CreateGroup {
 		// HBox holding all text prompts for group creation
 		HBox textPrompts = new HBox(10);
 		text_GroupTitle.setPromptText("Enter Group Title Here");
+		text_GroupTitle.setPrefSize(500, 100);
 		textPrompts.getChildren().addAll(label_GroupTitle, text_GroupTitle);
+		textPrompts.setAlignment(Pos.CENTER);
 
 		/***
 		 * Below is the collection of clickable fields, where users can add / remove
@@ -512,7 +514,7 @@ public class CreateGroup {
 			// ***** PUT THIS INTO DB!!!!***
 		    if (group != null) {
 		    	UserGroups existingGroup = GroupManager.getGroupByID(group.getID());
-		        // Update the existing group
+		        // Update the existing group 
 		    	existingGroup.setGroupName(groupName);
 		        existingGroup.setArticles(final_groupArticles);
 		        existingGroup.setAdmins(final_groupAdmins);
@@ -534,10 +536,13 @@ public class CreateGroup {
 		returnButton.setOnAction(e -> {
 			GroupInterface groupInterface = new GroupInterface(primaryStage, role);
 		});
+		
+		
 
 		// HBox holding all buttons
 		HBox buttons = new HBox(10);
 		buttons.getChildren().addAll(returnButton, createGroup);
+		buttons.setAlignment(Pos.CENTER);
 
 		VBox layout = new VBox(10);
 		layout.setAlignment(Pos.CENTER);

@@ -59,11 +59,12 @@ public class Article {
 	 * @param Links
 	 * @param body
 	 */
-	public Article(String title, SkillLevel skillLevel, String Abstract, ArrayList<String> keywords,
+	public Article(String title, SkillLevel skillLevel, String Abstract, String authors, ArrayList<String> keywords,
 			ArrayList<String> Links, String body) {
 		this.title = title;
 		this.skillLevel = skillLevel;
 		this.Abstract = Abstract;
+		this.author = authors;
 		this.keywords = keywords;
 		this.links = Links;
 		this.body = body;
@@ -316,7 +317,8 @@ public class Article {
 				if (empty || item == null) {
 					setText(null);
 				} else {
-					setText(item.getTitle()); // Only display the title of the Article
+					int index = listView.getItems().indexOf(item) + 1;
+					setText(index + ". " + item.getTitle() + ": " + item.getAuthor() + ", " + item.getAbstract()); // Only display the title of the Article
 				}
 			}
 		});
@@ -352,6 +354,9 @@ public class Article {
 
 		SkillLevel genericSkill = SkillLevel.BEGINNER;
 		String genericShortDescription = "This is a short description.";
+		String author = "James P. Sullivan";
+		String author2 = "Mike Wazoski";
+		String author3 = "Randall Boggs";
 		ArrayList<String> genericKeywords = new ArrayList<>();
 		genericKeywords.add("Keyword 1");
 		genericKeywords.add("Keyword 2");
@@ -361,17 +366,17 @@ public class Article {
 		genericLinks.add("Link 2");
 		genericLinks.add("Link 3");
 
-		articles.add(new Article("Title 1", genericSkill, genericShortDescription, genericKeywords, genericLinks,
+		articles.add(new Article("Title 1", genericSkill, genericShortDescription, author, genericKeywords, genericLinks,
 				"This is the content of Article 1."));
-		articles.add(new Article("Title 2", genericSkill, genericShortDescription, genericKeywords, genericLinks,
+		articles.add(new Article("Title 2", genericSkill, genericShortDescription, author2, genericKeywords, genericLinks,
 				"This is the content of Article 2."));
-		articles.add(new Article("Title 3", genericSkill, genericShortDescription, genericKeywords, genericLinks,
+		articles.add(new Article("Title 3", genericSkill, genericShortDescription, author3, genericKeywords, genericLinks,
 				"This is the content of Article 3."));
-		articles.add(new Article("Title 4", genericSkill, genericShortDescription, genericKeywords, genericLinks,
+		articles.add(new Article("Title 4", genericSkill, genericShortDescription, author2, genericKeywords, genericLinks,
 				"This is the content of Article 4."));
-		articles.add(new Article("Title 5", genericSkill, genericShortDescription, genericKeywords, genericLinks,
+		articles.add(new Article("Title 5", genericSkill, genericShortDescription, author3, genericKeywords, genericLinks,
 				"This is the content of Article 5."));
-		articles.add(new Article("Title 6", genericSkill, genericShortDescription, genericKeywords, genericLinks,
+		articles.add(new Article("Title 6", genericSkill, genericShortDescription, author, genericKeywords, genericLinks,
 				"This is the content of Article 6."));
 	}
 

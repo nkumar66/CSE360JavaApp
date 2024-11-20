@@ -8,6 +8,7 @@
 
 package src.CSE360App.GUI.Group_GUI;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import javax.swing.GroupLayout.Group;
@@ -18,7 +19,10 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import src.CSE360App.Article;
 import src.CSE360App.GroupManager;
@@ -35,7 +39,9 @@ public class GroupList {
 
 	// Buttons
 	private Button editGroup = new Button("Edit Group");
+	private Button browseButton = new Button("Browse");
 	private Button deleteGroup = new Button("Delete Group");
+	private Button backupGroups = new Button("Backup Groups");
 	private Button returnButton = new Button("Return");
 
 	private int width = 1000;
@@ -52,8 +58,15 @@ public class GroupList {
 
 
 		// Populate selectable_groupsList
+		
 		selectable_groupsList.addAll(groupsList);
-		groupView.setPrefWidth(width * .5);
+		HBox groupViewContainer = new HBox();
+		groupViewContainer.setAlignment(Pos.CENTER);
+		groupViewContainer.getChildren().add(groupView);
+
+		// Set preferred and maximum width for the groupView
+		groupView.setPrefWidth(width * 0.5);
+		groupView.setMaxWidth(width * 0.5); 
 		UserGroups.setColumnAttributes(groupView);
 
 		VBox layout = new VBox(10);
@@ -86,6 +99,32 @@ public class GroupList {
 					deleteGroup(groupSelected);
 				}
 			});
+		} else if(action.equalsIgnoreCase("backup")) {
+			TextField filePath = new TextField();
+			filePath.setPromptText("Click 'Browse' to select the backup file.");
+			filePath.setPrefWidth(.3 * width);
+
+			browseButton.setOnAction(e -> {
+				DirectoryChooser fileChooser = new DirectoryChooser();
+				fileChooser.setTitle("Select a Directory");
+
+				File selectedDirectory = fileChooser.showDialog(primaryStage);
+
+				if (selectedDirectory != null) {
+					filePath.setText(selectedDirectory.getAbsolutePath());
+				}
+			});
+			
+			backupGroups.setOnAction(e -> {
+				// ADD BACKUP LOGIC HERE!
+
+				System.out.println("you restored!");
+			});
+			HBox fileSelection = new HBox(10, filePath, browseButton, backupGroups);
+			fileSelection.setAlignment(Pos.CENTER);
+			layout.getChildren().add(fileSelection);
+			layout.setAlignment(Pos.CENTER);
+
 		}
 
 		// Return to previous menu

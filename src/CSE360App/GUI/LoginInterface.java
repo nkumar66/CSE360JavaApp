@@ -51,6 +51,7 @@ public class LoginInterface {
 	private String pass = "pass";
 
 	private String studentuser = "student";
+	private String instructoruser = "instructor";
 
 	
 	private int width = 400;
@@ -156,7 +157,7 @@ public class LoginInterface {
 			return false;
 		}
 
-		if ((username.equalsIgnoreCase(adminuser) || username.equalsIgnoreCase(studentuser))
+		if ((username.equalsIgnoreCase(adminuser) || username.equalsIgnoreCase(studentuser) ||username.equalsIgnoreCase(instructoruser))
 				&& password.equalsIgnoreCase(pass)) {
 //			System.out.println("RETURNING TRUE");
 			return true;
