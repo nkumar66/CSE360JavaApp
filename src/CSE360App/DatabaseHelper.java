@@ -175,26 +175,11 @@ class DatabaseHelper {
 	}
 	
 	// Searches articles by title and the substring for searching
-	public void searchArticlesByTitle(String titleSubstring, String filter) throws SQLException {
+	public void searchArticles(String substring, String filter) throws SQLException {
 		// SQL query
-	    String searchSQL = "SELECT * FROM cse360articles WHERE title LIKE ? AND skillLevel = ?";
+	    String searchSQL = "SELECT * FROM cse360articles WHERE publicTitle LIKE ? or author LIKE ? or abstract LIKE ? AND skillLevel = ?";
 	    try (PreparedStatement pstmt = connection.prepareStatement(searchSQL)) {
-	        pstmt.setString(1, "%" + titleSubstring + "%");
-	        ResultSet rs = pstmt.executeQuery();
-	        while (rs.next()) {
-	            // HOW DO YOU WANT TO DISPLAY ?
-	        }
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
-	}
-	
-	// Searches articles by author and the substring for searching
-	public void searchArticleByAuthor(String authorSubstring) {
-		// SQL query
-		String searchSQL = "SELECT * FROM cse360articles WHERE author LIKE ? AND skillLevel = ?";
-	    try (PreparedStatement pstmt = connection.prepareStatement(searchSQL)) {
-	        pstmt.setString(1, "%" + authorSubstring + "%");
+	        pstmt.setString(1, "%" + substring + "%");
 	        ResultSet rs = pstmt.executeQuery();
 	        while (rs.next()) {
 	            // HOW DO YOU WANT TO DISPLAY ?
