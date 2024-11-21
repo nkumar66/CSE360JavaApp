@@ -158,6 +158,63 @@ public class AdminClass extends UserClass {
         }
         return null; // Return null if no user is found
     }
+    
+    public static void createGroup(UserGroups group) {
+        GroupManager.addGroup(group);
+        System.out.println("Group created: " + group.getGroupName());
+    }
+
+    public static void deleteGroup(UserGroups group) {
+        if (group.getAccessLevel() == GroupAccess.SPECIAL && group.getAdmins().isEmpty()) {
+            System.out.println("Cannot delete a special group without admin rights.");
+            return;
+        }
+        GroupManager.removeGroup(group);
+        System.out.println("Group deleted: " + group.getGroupName());
+    }
+
+    public static void assignUserToGroup(UserClass user, UserGroups group) {
+        if (!group.hasUser(user)) { // Ensure the user isn't already in the group
+            if (group.getAccessLevel() == GroupAccess.SPECIAL && !user.getRoles().contains("Special Access")) {
+                System.out.println("User " + user.getUsername() + " does not have special access rights to join the group.");
+                return;
+            }
+            group.getUsers().add(user); // Explicitly add the user to the group
+            System.out.println("User " + user.getUsername() + " assigned to group: " + group.getGroupName());
+        } else {
+            System.out.println("User " + user.getUsername() + " is already a member of the group.");
+        }
+    }
+
+    public static void removeUserFromGroup(UserClass user, UserGroups group) {
+        if (group.getUsers().contains(user)) { // Explicit check for user presence in the group
+        	if (group.getAdmins().containsKey(user) && group.getAdmins().size() == 1) {
+                System.out.println("Cannot remove the last admin from the group.");
+                return;
+            }
+            group.getUsers().remove(user); // Explicitly remove the user from the group
+            System.out.println("User " + user.getUsername() + " removed from group: " + group.getGroupName());
+        } else {
+            System.out.println("User " + user.getUsername() + " is not a member of the group.");
+        }
+    }
+
+    public static void addUser(UserClass user) {
+        for (UserClass existingUser : users) {
+            if (existingUser.getUsername().equals(user.getUsername())) {
+                System.out.println("User " + user.getUsername() + " already exists.");
+                return;
+            }
+        }
+        users.add(user); // Add the user manually
+        System.out.println("User " + user.getUsername() + " added successfully.");
+        if (users.size() == 1) { // Assign admin role to the first user
+            user.getRoles().add("Admin");
+            System.out.println("First user detected. Automatically assigned as Admin.");
+        }
+    }
+
+
 
 
 
