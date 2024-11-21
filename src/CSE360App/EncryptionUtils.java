@@ -8,16 +8,19 @@ import java.util.Arrays;
 public class EncryptionUtils {
 	private static int IV_SIZE = 16;
 	
+	// Convert bytes to charArray
 	public static char[] toCharArray(byte[] bytes) {		
         CharBuffer charBuffer = Charset.defaultCharset().decode(ByteBuffer.wrap(bytes));
         return Arrays.copyOf(charBuffer.array(), charBuffer.limit());
 	}
 	
+	// Converts charArray to bytes
 	static byte[] toByteArray(char[] chars) {		
         ByteBuffer byteBuffer = Charset.defaultCharset().encode(CharBuffer.wrap(chars));
         return Arrays.copyOf(byteBuffer.array(), byteBuffer.limit());
 	}
-		
+	
+	// Initialization vector is made
 	public static byte[] getInitializationVector(char[] text) {
 		char iv[] = new char[IV_SIZE];
 		
@@ -30,6 +33,7 @@ public class EncryptionUtils {
 		return toByteArray(iv);
 	}
 	
+	// Prints charArray
 	public static void printCharArray(char[] chars) {
 		for(char c : chars) {
 			System.out.print(c);
