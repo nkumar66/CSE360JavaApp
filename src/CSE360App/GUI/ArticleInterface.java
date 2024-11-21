@@ -521,12 +521,22 @@ public class ArticleInterface {
 	    // Count articles by skill level
 	    int beginnerCount = 0, intermediateCount = 0, advancedCount = 0, expertCount = 0;
 	    for (Article article : filteredArticles) {
-	        switch (article.getSkillLevel()) {
-	            case BEGINNER -> beginnerCount++;
-	            case INTERMEDIATE -> intermediateCount++;
-	            case ADVANCED -> advancedCount++;
-	            case EXPERT -> expertCount++;
-	        }
+            switch (article.getSkillLevel()) {
+                case BEGINNER:
+                beginnerCount++;
+                break;
+
+                case INTERMEDIATE:
+                intermediateCount++;
+                break;
+                case ADVANCED:
+                advancedCount++;
+                break;
+
+                case EXPERT: 
+                expertCount++;
+                break;
+            }
 	    }
 
 	    // Update labels
