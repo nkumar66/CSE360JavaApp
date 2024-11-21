@@ -2,6 +2,12 @@ package src.CSE360App;
 import java.sql.*;
 
 import org.bouncycastle.util.Arrays;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Base64;
+import src.CSE360App.Encryption.*;
 
 
 class DatabaseHelper {
@@ -74,7 +80,8 @@ class DatabaseHelper {
 	}
 	
 	// Takes in inputs for an article and inserts it into the database
-	public void addArticle(String title, String publicTitle, String author, String abstr, String publicAbstr, String body, SkillLevel skill, String groupID, AccessLevel access, Date currDate) throws SQLException {
+	public void addArticle(String title, String publicTitle, String author, String abstr, String publicAbstr, String body, SkillLevel skill, String groupID, AccessLevel access, Date currDate) throws Exception {
+		String encryptedBody = Base64.getEncoder().encodeToString(EncryptionHelper.encrypt(body.getBytes(), EncryptionUtils.getInitializationVector(abstr.toCharArray())));
 		// SQL query 
 		String insertArticle = "INSERT INTO cse360 (title, publicTitle, author, abstract, publicAbstract, body, skillLevel, groupID, accessLevel, createdAt, updatedAt) " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		try (PreparedStatement pstmt = connection.prepareStatement(insertArticle)){
@@ -83,7 +90,7 @@ class DatabaseHelper {
 			pstmt.setString(3, author);
 			pstmt.setString(4, abstr);
 			pstmt.setString(5, publicAbstr);
-			pstmt.setString(6, body);
+			pstmt.setString(6, encryptedBody);
 			pstmt.setString(7, skill.toString());
 			pstmt.setString(8, groupID);
 			pstmt.setString(9, access.toString());
@@ -128,6 +135,8 @@ class DatabaseHelper {
 	
 	// Edits the articles in whatever way
 	public void editArticles(long id, String title, String publicTitle, String author, String abstr, String publicAbstr, String body, SkillLevel skill, String groupID, AccessLevel access) throws Exception {
+		String encryptedBody = Base64.getEncoder().encodeToString(EncryptionHelper.encrypt(body.getBytes(), EncryptionUtils.getInitializationVector(abstr.toCharArray())));
+
 		// SQL query
 		String editSQL = "UPDATE articles SET title = ?, publicTitle = ?, author = ?, abstract = ?, publicAbstract = ?, body = ?, skillLevel = ?, groupID = ?, access_level = ?, updatedAt = CURRENT_TIMESTAMP WHERE id = ?";
 	    try (PreparedStatement pstmt = connection.prepareStatement(editSQL)){
@@ -136,7 +145,7 @@ class DatabaseHelper {
 	    	pstmt.setString(3, author);
 	    	pstmt.setString(4, abstr);
 	    	pstmt.setString(5, publicAbstr);
-	    	pstmt.setString(6, body);
+	    	pstmt.setString(6, encryptedBody);
 	    	pstmt.setString(7, skill.toString());
 			pstmt.setString(8, groupID);
 			pstmt.setString(9, access.toString());
@@ -204,10 +213,13 @@ class DatabaseHelper {
 	}
 	
 	// Changes password of user based upon the email
-	public void changePassword(String email, String newPass) throws SQLException {
+	public void changePassword(String email, String newPass) throws Exception {
+		String encryptedPassword = Base64.getEncoder().encodeToString(
+                EncryptionHelper.encrypt(newPass.getBytes(), EncryptionUtils.getInitializationVector(email.toCharArray()))
+        );
 		String changeSQL = "UPDATE users SET pass = ? WHERE email = ?"; // SQL query
 		try(PreparedStatement pstmt = connection.prepareStatement(changeSQL)){
-			pstmt.setString(1, newPass);
+			pstmt.setString(1, encryptedPassword);
 			pstmt.setString(2, email);
 			
 			int rowsUpdated = pstmt.executeUpdate();
@@ -224,16 +236,19 @@ class DatabaseHelper {
 	}
 	
 	// Takes in input for a user and adds it to the database
-	public void addUser(String username, String password, String email, String firstName, String middleName, String lastName, String preferredFirstName, boolean isOTP, String oneTimePassword, Timestamp otpExpiration) throws SQLException {
+	public void addUser(String username, String password, String email, String firstName, String middleName, String lastName, String preferredFirstName, boolean isOTP, String oneTimePassword, Timestamp otpExpiration) throws Exception {
 		if (doesUserExist(username)) {
 	        // PROMPT USER TO SELECT DIFFERENT USERNAME
 	        return;
 	    }
+		String encryptedPassword = Base64.getEncoder().encodeToString(
+                EncryptionHelper.encrypt(password.getBytes(), EncryptionUtils.getInitializationVector(email.toCharArray()))
+        );
 		// SQL query
 		String addUserSQL = "INSERT INTO users (user, pass, email, firstName, middleName, lastName, preferredFirstName, isOTP, oneTimePassword, otpExpiration) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		try(PreparedStatement pstmt = connection.prepareStatement(addUserSQL)){
 			pstmt.setString(1, username);
-			pstmt.setString(2, password);
+			pstmt.setString(2, encryptedPassword);
 			pstmt.setString(3, email);
 			pstmt.setString(4, firstName);
 			pstmt.setString(5, middleName);
