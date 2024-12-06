@@ -113,6 +113,20 @@ public class LoginInterface {
 				 * main app. NEEDS: More validation techniques
 				 */
 			} else if (isInputValid()) {
+				try{
+					dbHelper.connectToDataBase();
+					System.out.println("Successful!");
+					dbHelper.displayArticles();
+					//dbHelper.displayGroups();
+					
+					} catch (SQLException f) {
+						System.out.println("Failed to connect to the database. Try again.");
+						// Debugging information
+				        System.out.println("Error Message: " + f.getMessage());
+				        System.out.println("SQL State: " + f.getSQLState());
+				        System.out.println("Error Code: " + f.getErrorCode());
+					}
+				
 
 				/*
 				 * Method validates username and password As is: just checks if they're not

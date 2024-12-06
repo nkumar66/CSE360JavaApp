@@ -35,17 +35,25 @@ public class DatabaseHelper {
 	private Connection connection = null; // to identify the connection
 
 	public void connectToDataBase() throws SQLException {
+		if (isConnected()) {
+			System.out.println("Database already connected");
+			return;
+		}
 		try {
 			Class.forName(JDBC_DRIVER); // Load the JDBC driver
 			System.out.println("Connecting to database...");
 			connection = DriverManager.getConnection(DB_URL, USER, PASS); // attempts to establish a connection
 			statement = connection.createStatement(); // to enter a statement to get data from the database
 			createTables(); // Create the necessary tables if they don't exist by calling below function
-			System.out.println("Successful!");
 		} catch (ClassNotFoundException e) { // if not found, prints error message below
 			System.err.println("JDBC Driver not found: " + e.getMessage());
 		}
 	}
+	//Function to check if database is already connected
+	public boolean isConnected() throws SQLException {
+		return connection != null && !connection.isClosed();
+	}
+	
 
 	// Creates articleTable and userTable
 	private void createTables() throws SQLException {
@@ -82,6 +90,7 @@ public class DatabaseHelper {
 				+ ")";
 		statement.execute(articleTable);
 		statement.execute(userTable);
+		createUserGroupsTable();
 	}
 
 	// Checks if the article database is empty
@@ -147,7 +156,7 @@ public class DatabaseHelper {
 	}
 
 	// Displays all the articles in the database
-	public void displayArticles() throws Exception {
+	public void displayArticles() throws SQLException {
 		// SQL query
 		String sql = "SELECT * FROM cse360articles";
 		Statement stmt = connection.createStatement();
@@ -514,7 +523,7 @@ public class DatabaseHelper {
 				+ "updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" + ")";
 		try (Statement stmt = connection.createStatement()) {
 			stmt.execute(createTableSQL);
-			System.out.println("user_groups table created or already exists.");
+			//System.out.println("user_groups table created or already exists.");
 		}
 	}
 
