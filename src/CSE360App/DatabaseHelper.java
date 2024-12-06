@@ -38,33 +38,34 @@ public class DatabaseHelper {
 	
 	// Creates articleTable and userTable
 	private void createTables() throws SQLException {
-	    String articleTable = "CREATE TABLE IF NOT EXISTS cse360articles ("
+		String articleTable = "CREATE TABLE IF NOT EXISTS cse360articles ("
 	            + "id BIGINT AUTO_INCREMENT PRIMARY KEY, "   // Unique article ID
 	            + "title VARCHAR(255), "                     // Article title
-	            + "publicTitle VARCHAR(255)"				 // Title for public use
+	            + "publicTitle VARCHAR(255), "               // Title for public use
 	            + "author VARCHAR(255), "                    // Author's name
 	            + "abstract TEXT, "                          // Abstract for the article
-	            + "publicAbstract TEXT"						 // Abstract for public use
+	            + "publicAbstract TEXT, "                    // Abstract for public use
 	            + "body LONGTEXT, "                          // Full article body
-	            + "skillLevel VARCHAR(50), " 				 // Difficulty level
+	            + "skillLevel VARCHAR(50), "                 // Difficulty level
 	            + "groupID VARCHAR(100), "                   // Group identifier for related articles
-	            + "accessLevel VARCHAR(50), " 				 // Access level for viewing
+	            + "accessLevel VARCHAR(50), "                // Access level for viewing
 	            + "createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " // Timestamp for article creation
 	            + "updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" // Timestamp for last update
 	            + ")";
+
 	    String userTable = "CREATE TABLE IF NOT EXISTS cse360users ("
-	    		+ "id INT AUTO-INCREMENT PRIMARY KEY, "		// Unique user ID
-	    		+ "user VARCHAR(255) UNIQUE"				// Username
-	    		+ "pass VARCHAR(255)"						// Password
-	    		+ "email VARCHAR(255)"						// Email
-	    		+ "firstName VARCHAR(255)"					// User First Name
-	    		+ "middleName VARCHAR(255)"					// User Middle Name
-	    		+ "lastName VARCHAR(255)"					// User Last Name
-	    		+ "preferredFirstName VARCHAR(255)"			// User preferred First Name
-	    		+ "isOTP BOOLEAN"							// If it is OTP password
-	    		+ "oneTimePassword VARCHAR(255)"			// Current OTP
-	    		+ "otpExpiration TIMESTAMP"					// When OTP expires
-	    		+ ")";
+	            + "id INT AUTO_INCREMENT PRIMARY KEY, "      // Unique user ID
+	            + "`user` VARCHAR(255) UNIQUE, "               // Username
+	            + "pass VARCHAR(255), "                      // Password
+	            + "email VARCHAR(255), "                     // Email
+	            + "firstName VARCHAR(255), "                 // User First Name
+	            + "middleName VARCHAR(255), "                // User Middle Name
+	            + "lastName VARCHAR(255), "                  // User Last Name
+	            + "preferredFirstName VARCHAR(255), "        // User preferred First Name
+	            + "isOTP BOOLEAN, "                          // If it is OTP password
+	            + "oneTimePassword VARCHAR(255), "           // Current OTP
+	            + "otpExpiration TIMESTAMP"                  // When OTP expires
+	            + ")";
 	    statement.execute(articleTable);
 	    statement.execute(userTable);
 	}

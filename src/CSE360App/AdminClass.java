@@ -88,7 +88,7 @@ public class AdminClass extends UserClass {
     	System.out.println("Are you sure you want to delete the account for " + user.getUsername() + "? (Yes/No)");
         Scanner scanner = new Scanner(System.in);
         String confirmation = scanner.nextLine();		//to get input from the console
-
+        scanner.close();
         if (confirmation.equalsIgnoreCase("Yes")) {		//if the case is yes, then prints the user has been deleted
             users.remove(user);
             System.out.println("User " + user.getUsername() + " has been deleted.");
@@ -158,6 +158,8 @@ public class AdminClass extends UserClass {
         }
         return null; // Return null if no user is found
     }
+    
+    //Below is phase 3 stuff
     
     public static void createGroup(UserGroups group) {
         GroupManager.addGroup(group);

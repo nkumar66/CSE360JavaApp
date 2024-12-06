@@ -100,6 +100,10 @@ public class LoginInterface {
 				dbHelper.connectToDataBase();
 				} catch (SQLException f) {
 					System.out.println("Failed to connect to the database. Try again.");
+					// Debugging information
+			        System.out.println("Error Message: " + f.getMessage());
+			        System.out.println("SQL State: " + f.getSQLState());
+			        System.out.println("Error Code: " + f.getErrorCode());
 				}
 				proceedToSignUp(primaryStage);
 
