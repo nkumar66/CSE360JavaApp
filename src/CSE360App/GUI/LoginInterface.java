@@ -56,6 +56,8 @@ public class LoginInterface {
 	
 	private int width = 400;
 	private int height = 300;
+	
+	private DatabaseHelper dbHelper;
 	/******
 	 * This method initializes all of the elements of the login GUI.
 	 * 
@@ -82,7 +84,12 @@ public class LoginInterface {
 		text_InviteCode.setPromptText("Invite Code (optional)");
 		
 		//Creates an instance of the database
-		DatabaseHelper dbHelper = new DatabaseHelper();
+		try {
+		dbHelper = DatabaseHelper.getInstance();
+		} catch (SQLException e) {
+			System.out.println("Instance creation failed");
+		}
+
 
 		// Login button action
 		/*

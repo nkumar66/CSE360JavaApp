@@ -29,10 +29,20 @@ public class DatabaseHelper {
 	// Database credentials
 	static final String USER = "sa";
 	static final String PASS = "";
+	
+	private static DatabaseHelper instance;
 
 	Statement statement;
 
 	private Connection connection = null; // to identify the connection
+	
+	//function to ensure we can access the same instance in all files
+	public static synchronized DatabaseHelper getInstance() throws SQLException {
+        if (instance == null) {
+            instance = new DatabaseHelper();
+        }
+        return instance;
+    }
 
 	public void connectToDataBase() throws SQLException {
 		if (isConnected()) {
