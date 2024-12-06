@@ -115,7 +115,7 @@ public class CreateGroup {
 	private Button editStudent = new Button("Edit Selected Student");
 	private Button removeStudent = new Button("Remove Selected Student");
 
-	private Button removeArticle = new Button("Remove Selected Admin");
+	private Button removeArticle = new Button("Remove Selected Article");
 
 	// Labels / Textfields
 	private Label label_SelectUser = new Label("Select Users");
@@ -477,7 +477,10 @@ public class CreateGroup {
 		 * 
 		 */
 		createGroup.setOnAction(e -> {
-			System.out.printf("Title: %s\n", text_GroupTitle.getText());
+			System.out.println("\n\nGroups before change: ");
+			GroupManager.printGroupsWithAttributes();
+			
+//			System.out.printf("Title: %s\n", text_GroupTitle.getText());
 			String groupName = text_GroupTitle.getText();
 
 //			System.out.println("Final Group Students:");
@@ -529,6 +532,8 @@ public class CreateGroup {
 		        GroupManager.addGroup(groupToAdd);
 		        System.out.println("New group added: " + groupName );
 		    }
+		    System.out.println("\n\nGroups after change: ");
+		    GroupManager.printGroupsWithAttributes();
 		    GroupInterface groupInterface = new GroupInterface(primaryStage, role);
 		});
 

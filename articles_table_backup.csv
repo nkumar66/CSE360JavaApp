@@ -1,0 +1,3 @@
+id,title,publicTitle,author,abstract,publicAbstract,body,skillLevel,groupID,accessLevel,createdAt,updatedAt
+50,Title1,PublicTitle1,Author1,Abstract1,PublicAbstract1,S7bZnSzOI8FWkbw96vZenw==,BEGINNER,GroupID1,PUBLIC,2024-12-06 00:00:00.0,2024-12-06 00:00:00.0
+51,Title2,PublicTitle2,Author2,Abstract2,PublicAbstract2,uRIHyK8mEzvrjkdG3krPeA==,INTERMEDIATE,GroupID2,PUBLIC,2024-12-06 00:00:00.0,2024-12-06 00:00:00.0

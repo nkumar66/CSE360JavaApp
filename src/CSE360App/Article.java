@@ -14,6 +14,7 @@
 package src.CSE360App;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import javafx.scene.control.ListCell;
@@ -70,6 +71,22 @@ public class Article {
 		this.body = body;
 
 	}
+	
+	// Add a new constructor to match the deserialization format
+	public Article(long id, String title, String publicTitle, String author, String abstr, SkillLevel skillLevel, String body) {
+	    this.id = id;
+	    this.title = title;
+	    this.publicTitle = publicTitle;
+	    this.author = author;
+	    this.Abstract = abstr;
+	    this.skillLevel = skillLevel;
+	    this.body = body;
+
+	    // Initialize other optional fields with defaults
+	    this.keywords = new ArrayList<>();
+	    this.links = new ArrayList<>();
+	}
+
 
 	/**
 	 * getHeaderAsString: Converts the "header" (AKA as skill level for article) to
@@ -323,6 +340,49 @@ public class Article {
 			}
 		});
 	}
+	
+	@Override
+	public String toString() {
+	    return String.join("|",
+	        String.valueOf(id),        // ID
+	        title,                     // Title
+	        publicTitle,               // Public Title
+	        author,                    // Author
+	        Abstract,                  // Abstract
+	        skillLevel.name(),         // Skill Level
+	        body                       // Body
+	    );
+	}
+
+
+	/***
+	 * Converts a serialized string into an `Article` object.
+	 * The serialized string is expected to contain the article's fields separated by the '|' character.
+	 * @param serializedArticle
+	 * @return
+	 */
+	public static Article fromString(String serializedArticle) {
+	    String[] parts = serializedArticle.split("\\|");
+	    if (parts.length < 7) { // Ensure all fields are present
+	        throw new IllegalArgumentException("Invalid serialized article format");
+	    }
+
+	    long id = Long.parseLong(parts[0].trim());
+	    String title = parts[1].trim();
+	    String publicTitle = parts[2].trim();
+	    String author = parts[3].trim();
+	    String abstr = parts[4].trim();
+	    SkillLevel skillLevel = SkillLevel.valueOf(parts[5].trim().toUpperCase());
+	    String body = parts[6].trim();
+
+	    // Create and return a new Article object
+	    return new Article(id, title, publicTitle, author, abstr, skillLevel, body);
+	}
+
+
+
+
+
 
 	
 	/***

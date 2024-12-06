@@ -94,6 +94,8 @@ public class UserClass {
 	public boolean validatePassword(String inputPassword) {
 		return new String(this.password).equals(inputPassword); // Compares input password with stored password
 	}
+	
+	
 
 	/***
 	 * setColumnAttributes: Helper method that defaults all user-based selectable

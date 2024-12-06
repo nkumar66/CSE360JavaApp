@@ -174,6 +174,8 @@ public class UserGroups {
             }
         });
     }
+    
+    
 
     /***
      * This overrides the equals operator so that it compares Groups by id NEEDS:
