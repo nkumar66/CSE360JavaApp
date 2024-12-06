@@ -1,7 +1,7 @@
 package src.CSE360App.GUI;
-
+import src.CSE360App.DatabaseHelper;
+import java.sql.SQLException;
 import java.net.URL;
-
 import javafx.geometry.Insets;
 //JavaFX imports needed to support the Graphical User Interface
 import javafx.geometry.Pos;
@@ -81,7 +81,8 @@ public class LoginInterface {
 		text_Password.setPromptText("Password");
 		text_InviteCode.setPromptText("Invite Code (optional)");
 		
-
+		//Creates an instance of the database
+		DatabaseHelper dbHelper = new DatabaseHelper();
 
 		// Login button action
 		/*
@@ -95,6 +96,11 @@ public class LoginInterface {
 			 * checking if code is valid generated
 			 */
 			if (!text_InviteCode.getText().isEmpty()) {
+				try{
+				dbHelper.connectToDataBase();
+				} catch (SQLException f) {
+					System.out.println("Failed to connect to the database. Try again.");
+				}
 				proceedToSignUp(primaryStage);
 
 				/*

@@ -1,16 +1,15 @@
 package src.CSE360App;
 import java.sql.*;
-
 import org.bouncycastle.util.Arrays;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Base64;
-import src.CSE360App.Encryption.*;
+//import src.CSE360App.Encryption.*;
 
 
-class DatabaseHelper {
+public class DatabaseHelper {
 	
 	// Setting up the driver name and database URL.
 	static final String JDBC_DRIVER = "org.h2.Driver";
@@ -31,6 +30,7 @@ class DatabaseHelper {
 			connection = DriverManager.getConnection(DB_URL, USER, PASS);		//attempts to establish a connection
 			statement = connection.createStatement(); 			//to enter a statement to get data from the database
 			createTables();  // Create the necessary tables if they don't exist by calling below function
+			System.out.println("Successful!");
 		} catch (ClassNotFoundException e) {			//if not found, prints error message below
 			System.err.println("JDBC Driver not found: " + e.getMessage());
 		}
