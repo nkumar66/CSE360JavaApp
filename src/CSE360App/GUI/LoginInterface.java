@@ -1,6 +1,10 @@
 package src.CSE360App.GUI;
 import src.CSE360App.DatabaseHelper;
+import src.CSE360App.EncryptionHelper;
+import src.CSE360App.EncryptionUtils;
+
 import java.sql.SQLException;
+import java.util.Base64;
 import java.net.URL;
 import javafx.geometry.Insets;
 //JavaFX imports needed to support the Graphical User Interface
@@ -42,6 +46,7 @@ public class LoginInterface {
 
 	private TextField text_UserName = new TextField();
 	private PasswordField text_Password = new PasswordField();
+	private TextField text_Email = new TextField();
 	private TextField text_InviteCode = new TextField();
 
 	private Button loginButton = new Button("Login");
@@ -124,7 +129,7 @@ public class LoginInterface {
 					dbHelper.connectToDataBase();
 					System.out.println("Successful!");
 					dbHelper.displayArticles();
-					//dbHelper.displayGroups();
+					dbHelper.displayGroups();
 					
 					} catch (SQLException f) {
 						System.out.println("Failed to connect to the database. Try again.");
@@ -178,32 +183,45 @@ public class LoginInterface {
 
 	private boolean isInputValid() {
 		String username = text_UserName.getText();
-		String password = text_Password.getText(); // Now password is a String
+	    String password = text_Password.getText(); // Password is now a String
+	    String encryptedPassword = null;
+	    try {
+	    encryptedPassword = Base64.getEncoder().encodeToString(EncryptionHelper.encrypt(password.getBytes(),
+	            EncryptionUtils.getInitializationVector(username.toCharArray())));
+	    } catch (Exception p) {
+	    	System.out.println("Could not encrypt password");
+	    }
 
-		if (username.isEmpty()) {
-			errorMessage.setText("Username cannot be empty");
-			return false;
-		} else if (password.isEmpty()) {
-			errorMessage.setText("Password cannot be empty");
-			return false;
-		}
+	    // Check for empty fields
+	    if (username.isEmpty()) {
+	        errorMessage.setText("Username cannot be empty");
+	        return false;
+	    } else if (password.isEmpty()) {
+	        errorMessage.setText("Password cannot be empty");
+	        return false;
+	    }
 
-		if ((username.equalsIgnoreCase(adminuser) || username.equalsIgnoreCase(studentuser) ||username.equalsIgnoreCase(instructoruser))
+	    // Validate credentials against the database
+	    if ((username.equalsIgnoreCase(adminuser) || username.equalsIgnoreCase(studentuser) ||username.equalsIgnoreCase(instructoruser))
 				&& password.equalsIgnoreCase(pass)) {
 //			System.out.println("RETURNING TRUE");
 			return true;
-		} else {
-//			System.out.println("RETURNING falsev :(");
-			return false;
 		}
-		// Validate against stored users
-//        UserClass foundUser = AdminClass.findUserByUsername(username);
-//        if (foundUser != null && foundUser.validatePassword(password)) {
-//            return true;
-//        } else {
-//            errorMessage.setText("Invalid username or password");
-//            return false;
-//        }
+	    try {
+	        // Use the database helper to check credentials
+	        if (dbHelper != null && dbHelper.doesUserExist(username, encryptedPassword)) {
+	            System.out.println("Login successful!");
+	            return true;
+	        } else {
+	            errorMessage.setText("Invalid username or password");
+	            return false;
+	        }
+	    } catch (SQLException e) {
+	        // Log and display an error message if database validation fails
+	        System.out.println("Database error: " + e.getMessage());
+	        errorMessage.setText("An error occurred while validating credentials. Please try again.");
+	        return false;
+	    }
 	}
 
 	/****

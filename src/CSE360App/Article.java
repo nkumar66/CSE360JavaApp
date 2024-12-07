@@ -132,15 +132,12 @@ public class Article {
 	 * @return keywords as a comma delimited string
 	 */
 	public String getKeywordsAsString() {
-		String val = "";
-		for (int i = 0; i < keywords.size() - 1; i++) {
-			val += keywords.get(i) + ", ";
-		}
-		val += keywords.getLast();
-
-		return val;
-
+	    if (keywords == null || keywords.isEmpty()) {
+	        return "No keywords available"; // Handle empty or null lists
+	    }
+	    return String.join(", ", keywords);
 	}
+
 
 	/**
 	 * getLinksAsString: Converts the links array list into a comma delimited
@@ -150,15 +147,12 @@ public class Article {
 	 * @return links as a comma delimited string
 	 */
 	public String getLinksAsString() {
-		String val = "";
-		for (int i = 0; i < links.size() - 1; i++) {
-			val += links.get(i) + ", ";
-		}
-		val += links.getLast();
-
-		return val;
-
+	    if (links == null || links.isEmpty()) {
+	        return "No links available"; // Handle empty or null lists gracefully
+	    }
+	    return String.join(", ", links);
 	}
+
 
 	// Below are just the getter & setter methods for each attribute.
 	

@@ -287,6 +287,7 @@ public class SignUpInterface {
 					System.out.println("FAILED TO ADD");
 				} else {
 					System.out.println("SUCCESSFUL ADD");
+					dbHelper.displayUsers();
 				}
 			} catch (SQLException excep) {
 				System.out.println("SQLException error");

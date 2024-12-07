@@ -55,6 +55,7 @@ public class DatabaseHelper {
 			connection = DriverManager.getConnection(DB_URL, USER, PASS); // attempts to establish a connection
 			statement = connection.createStatement(); // to enter a statement to get data from the database
 			createTables(); // Create the necessary tables if they don't exist by calling below function
+			clearDatabase();
 		} catch (ClassNotFoundException e) { // if not found, prints error message below
 			System.err.println("JDBC Driver not found: " + e.getMessage());
 		}
@@ -115,41 +116,41 @@ public class DatabaseHelper {
 
 	// Takes in inputs for an article and inserts it into the database
 	public void addArticle(List<String> roles, String title, String publicTitle, String author, String abstr,
-			String publicAbstr, String body, SkillLevel skill, String groupID, AccessLevel access, Date currDate)
-			throws Exception {
-		// Check if the user has "Admin" role in its list of roles
-		if (!roles.contains("Admin")) {
-			throw new SecurityException("Permission denied: User does not have Admin rights.");
-		}
+            String publicAbstr, String body, SkillLevel skill, String groupID, AccessLevel access, java.util.Date date,
+            List<String> keywords, List<String> links) throws Exception {
+        // Check if the user has "Admin" role in its list of roles
+        if (!roles.contains("Admin")) {
+            throw new SecurityException("Permission denied: User does not have Admin rights.");
+        }
 
-		// Continue with adding the article
-		// Encrypts the body
-		String encryptedBody = Base64.getEncoder().encodeToString(EncryptionHelper.encrypt(body.getBytes(),
-				EncryptionUtils.getInitializationVector(abstr.toCharArray())));
+        // Continue with adding the article
+        // Encrypts the body
+        String encryptedBody = Base64.getEncoder().encodeToString(EncryptionHelper.encrypt(body.getBytes(),
+                EncryptionUtils.getInitializationVector(abstr.toCharArray())));
 
-		String insertArticle = "INSERT INTO cse360articles (title, publicTitle, author, abstract, publicAbstract, body, skillLevel, groupID, accessLevel, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String insertArticle = "INSERT INTO cse360articles (title, publicTitle, author, abstract, publicAbstract, body, skillLevel, groupID, accessLevel, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-		try (PreparedStatement pstmt = connection.prepareStatement(insertArticle)) {
-			pstmt.setString(1, title);
-			pstmt.setString(2, publicTitle);
-			pstmt.setString(3, author);
-			pstmt.setString(4, abstr);
-			pstmt.setString(5, publicAbstr);
-			pstmt.setString(6, encryptedBody);
-			pstmt.setString(7, skill.toString());
-			pstmt.setString(8, groupID);
-			pstmt.setString(9, access.toString());
-			pstmt.setDate(10, new java.sql.Date(currDate.getTime()));
-			pstmt.setDate(11, new java.sql.Date(currDate.getTime()));
+        try (PreparedStatement pstmt = connection.prepareStatement(insertArticle)) {
+            pstmt.setString(1, title);
+            pstmt.setString(2, publicTitle);
+            pstmt.setString(3, author);
+            pstmt.setString(4, abstr);
+            pstmt.setString(5, publicAbstr);
+            pstmt.setString(6, encryptedBody);
+            pstmt.setString(7, skill.toString());
+            pstmt.setString(8, groupID);
+            pstmt.setString(9, access.toString());
+            pstmt.setDate(10, new java.sql.Date(date.getTime()));
+            pstmt.setDate(11, new java.sql.Date(date.getTime()));
 
-			int rowsInserted = pstmt.executeUpdate();
-			if (rowsInserted > 0) {
-				System.out.println("Article added successfully.");
-			} else {
-				System.out.println("Failed to add article.");
-			}
-		}
-	}
+            int rowsInserted = pstmt.executeUpdate();
+            if (rowsInserted > 0) {
+                System.out.println("Article added successfully.");
+            } else {
+                System.out.println("Failed to add article.");
+            }
+        }
+    }
 
 	// Checks based on title if an article exists in the database with that title
 	public boolean doesArticleExist(long id, String title) throws SQLException {
@@ -430,13 +431,25 @@ public class DatabaseHelper {
 			e.printStackTrace();
 		}
 	}
+	//clear the user table: 
+	
+	public void clearDatabase() {
+	    String clearSQL = "TRUNCATE TABLE cse360users"; // or DELETE FROM cse360users
+	    try (PreparedStatement pstmt = connection.prepareStatement(clearSQL)) {
+	        pstmt.executeUpdate();
+	        System.out.println("Database cleared successfully.");
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	}
 
 	// Takes in input for a user and adds it to the database
 	public void addUser(String username, String password, String email, String firstName, String middleName,
 			String lastName, String preferredFirstName, boolean isOTP, String oneTimePassword, Timestamp otpExpiration)
 			throws Exception {
-		if (doesUserExist(username)) {
+		if (doesUserExist(username, password)) {
 			// PROMPT USER TO SELECT DIFFERENT USERNAME
+			System.out.println("Username already exists");
 			return;
 		}
 		String encryptedPassword = Base64.getEncoder().encodeToString(EncryptionHelper.encrypt(password.getBytes(),
@@ -455,30 +468,60 @@ public class DatabaseHelper {
 			pstmt.setString(9, oneTimePassword);
 			pstmt.setTimestamp(10, otpExpiration);
 
-			int rowsUpdated = pstmt.executeUpdate();
-			if (rowsUpdated > 0) {
-				System.out.println("Password updated successfully for email: " + email);
-			} else {
-				System.out.println("No user found with the given email.");
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+			try {
+	            int rowsUpdated = pstmt.executeUpdate();
+	            if (rowsUpdated > 0) {
+	                System.out.println("User added successfully for email: " + email);
+	            } else {
+	                System.out.println("No user found with the given email.");
+	            }
+	        } catch (SQLIntegrityConstraintViolationException e) {
+	            System.out.println("Username already exists. Please choose a different username.");
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
 	}
 
 	// Checks if user with a certain username exists
-	private boolean doesUserExist(String username) throws SQLException {
-		// SQL query
-		String checkUserSQL = "SELECT COUNT(*) FROM cse360users WHERE user = ?";
-		try (PreparedStatement pstmt = connection.prepareStatement(checkUserSQL)) {
-			pstmt.setString(1, username);
-			ResultSet rs = pstmt.executeQuery();
-			if (rs.next()) {
-				return rs.getInt(1) > 0;
-			}
-		}
-		return false;
+	public boolean doesUserExist(String username, String password) throws SQLException {
+		// SQL query to check username and password
+	    String validateCredentialsSQL = "SELECT COUNT(*) FROM cse360users WHERE user = ? AND pass = ?";
+	    try (PreparedStatement pstmt = connection.prepareStatement(validateCredentialsSQL)) {
+	        pstmt.setString(1, username);
+	        pstmt.setString(2, password);
+	        ResultSet rs = pstmt.executeQuery();
+	        if (rs.next()) {
+	            return rs.getInt(1) > 0; // Returns true if there is at least one match
+	        }
+	    }
+	    return false;
 	}
+	
+	//displays the users:
+	public void displayUsers() {
+        String query = "SELECT * FROM cse360users";  // SQL query to select all records from the table
+        try (Statement stmt = connection.createStatement(); 
+             ResultSet rs = stmt.executeQuery(query)) {
+
+            // Check if there are any records
+            if (!rs.isBeforeFirst()) {
+                System.out.println("No records found in the cse360users table.");
+                return;
+            }
+
+            // Loop through the result set and print the records
+            while (rs.next()) {
+                String username = rs.getString("user");
+                String password = rs.getString("pass");
+                // Print out the username and password (this could be encrypted in the database)
+                System.out.println("Username: " + username + ", Password: " + password);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error fetching user data: " + e.getMessage());
+        }
+    }
 
 	// Deletes user using their email
 	public void deleteUser(String email) {
@@ -807,6 +850,26 @@ public class DatabaseHelper {
 			}
 		}
 	}
+	
+	public void deleteArticleByTitle(String title) throws SQLException {
+        String query = "DELETE FROM cse360articles WHERE title = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, title);
+            statement.executeUpdate();
+            System.out.println("Article with title '" + title + "' deleted successfully from the database.");
+        }
+    }
+
+
+    public boolean doesTableExist(String tableName) {
+        String query = "SELECT 1 FROM " + tableName + " LIMIT 1";
+        try (Statement stmt = connection.createStatement()) {
+            stmt.executeQuery(query); // Execute the query
+            return true; // If no exception, table exists
+        } catch (SQLException e) {
+            return false; // If an exception occurs, table doesn't exist
+        }
+    }
 
 
 	/***

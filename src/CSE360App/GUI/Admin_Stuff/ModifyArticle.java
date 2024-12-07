@@ -1,6 +1,7 @@
 package src.CSE360App.GUI.Admin_Stuff;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import src.CSE360App.GUI.ArticleInterface;
 import javafx.geometry.Insets;
@@ -19,19 +20,13 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import src.CSE360App.SkillLevel;
+import src.CSE360App.AccessLevel;
+import src.CSE360App.DatabaseHelper;
 
-/**
- * <p>
- * ModifyArticle Class
- * </p>
- * 
- * <p>
- * Description: The modify article class allows for the creation / modification
- * of any article.
- * 
- */
 public class ModifyArticle {
-	 // Labels
+
+    // Labels
     private Label label_Title = new Label("Title: ");
     private Label label_PublicTitle = new Label("Public Title: ");
     private Label label_Author = new Label("Author: ");
@@ -63,126 +58,77 @@ public class ModifyArticle {
     private Button submitButton = new Button("Submit");
     private Button returnToArticlesButton = new Button("Return");
 
-    // Window size
-    private int width = 700;
-    private int height = 600;
-
     // Storage for tags
     private ArrayList<String> keywords = new ArrayList<>();
     private ArrayList<String> links = new ArrayList<>();
-    
-    
-	/***
-	 * ModifyArticle: This constructor is used to CREATE articles, takes now values
-	 * other than default stage and role. As-Is: Skeleton of GUI concept for this
-	 * portion, really does nothing at the moment. NEEDS: Method of capturing
-	 * keywords, links and header Actual logic of creating header and adding it to
-	 * database Formatting
-	 * 
-	 * @param primaryStage
-	 * @param role
-	 */
+
     public ModifyArticle(Stage primaryStage, String role) {
-        setupUI(primaryStage, role, "", "", "", keywords, links);
-    }
-    
-    
-	/***
-	 * ModifyArticle: This constructor is used to MODIFY articles, takes current
-	 * values and pre-fills them into text fields. As-Is: Skeleton of GUI concept
-	 * for this portion, really does nothing at the moment. NEEDS: Method of
-	 * capturing keywords, links and header Actual logic of creating header and
-	 * adding it to database Formatting
-	 * 
-	 * @param primaryStage
-	 * @param role
-	 * @param title
-	 * @param description
-	 * @param body
-	 */
-    public ModifyArticle(Stage primaryStage, String role, String title, String description, String body,
-                         ArrayList<String> oldKeywords, ArrayList<String> oldLinks) {
-        setupUI(primaryStage, role, title, description, body, oldKeywords, oldLinks);
+        setupUI(primaryStage, role, "", "", "", keywords, links, "", "", "", SkillLevel.BEGINNER, AccessLevel.PUBLIC);
+        
     }
 
-    
-    /***
-     * setupUI: Uses passed in data to prefill and present user with nicely formatted modify / create article page
-     * @param primaryStage
-     * @param role
-     * @param title
-     * @param description
-     * @param body
-     * @param initialKeywords
-     * @param initialLinks
-     */
+    public ModifyArticle(Stage primaryStage, String role, String title, String description, String body,
+            ArrayList<String> oldKeywords, ArrayList<String> oldLinks,
+            String publicTitle, String publicAbstract, String groupID, SkillLevel skillLevel, AccessLevel accessLevel) {
+
+// Ensure accessLevel is not null
+if (accessLevel == null) {
+System.err.println("Error: AccessLevel is null. Defaulting to PUBLIC.");
+accessLevel = AccessLevel.PUBLIC; // Default to PUBLIC
+}
+
+setupUI(primaryStage, role, title, description, body, oldKeywords, oldLinks, publicTitle, publicAbstract, groupID, skillLevel, accessLevel);
+}
+
     private void setupUI(Stage primaryStage, String role, String title, String description, String body,
-                         ArrayList<String> initialKeywords, ArrayList<String> initialLinks) {
-    	
-    	
-    	ArrayList<String> keywords = new ArrayList<>();
-		ArrayList<String> links = new ArrayList<>();
-    	
+                         ArrayList<String> initialKeywords, ArrayList<String> initialLinks,
+                         String publicTitle, String publicAbstract, String groupID,
+                         SkillLevel skillLevel, AccessLevel accessLevel) {
+
         // Populate ComboBoxes
         skillLevelComboBox.getItems().addAll("Beginner", "Intermediate", "Advanced", "Expert");
-        skillLevelComboBox.setValue("Beginner");
+        skillLevelComboBox.setValue(skillLevel.toString());
 
         accessLevelComboBox.getItems().addAll("Public", "Instructor", "Admin");
-        accessLevelComboBox.setValue("Public");
+        accessLevelComboBox.setValue(accessLevel.toString());
 
         // Set initial text field values if provided
         text_Title.setText(title);
+        text_PublicTitle.setText(publicTitle);
+        text_Author.setText("");
         text_Abstract.setText(description);
+        text_PublicAbstract.setText(publicAbstract);
         text_Body.setText(body);
+        text_GroupID.setText(groupID);
+
+        // Initialize keywords and links
+        keywords.addAll(initialKeywords);
+        links.addAll(initialLinks);
 
         // GridPane layout setup
         GridPane layout = new GridPane();
-        VBox outerLayer = new VBox(layout);
-        outerLayer.setAlignment(Pos.CENTER);
         layout.setHgap(10);
         layout.setVgap(10);
         layout.setAlignment(Pos.CENTER);
 
         // Add fields to the layout
         int rowIndex = 0;
-        
-        // TITLES
         addFormField(layout, label_Title, text_Title, rowIndex++);
         addFormField(layout, label_PublicTitle, text_PublicTitle, rowIndex++);
-        
-        //AUTHORS
         addFormField(layout, label_Author, text_Author, rowIndex++);
-
-        //ABSTRACTS
         addFormField(layout, label_Abstract, text_Abstract, rowIndex++);
         addFormField(layout, label_PublicAbstract, text_PublicAbstract, rowIndex++);
-        
-        //BODY
-        
-        //sizing for labels / input
-        label_Title.setPrefWidth(400);
-        text_Body.setPrefSize(500, 200);
         addFormField(layout, label_Body, text_Body, rowIndex++);
-        
-        //SKILL LEVEL / ACCESS LEVEL
         addFormField(layout, label_SkillLevel, skillLevelComboBox, rowIndex++);
         addFormField(layout, label_AccessLevel, accessLevelComboBox, rowIndex++);
-        
-        //GROUP ID
         addFormField(layout, label_GroupID, text_GroupID, rowIndex++);
-        
-
-        // Keywords
-        
-        addTagField(layout, label_Keywords, text_Keywords, initialKeywords, rowIndex++);
-        
-        // Links
-        addTagField(layout, label_Links, text_Links, initialLinks, rowIndex++);
+        addTagField(layout, label_Keywords, text_Keywords, keywords, rowIndex++);
+        addTagField(layout, label_Links, text_Links, links, rowIndex++);
 
         // Add submit and return buttons
         HBox buttonBox = new HBox(10, submitButton, returnToArticlesButton);
         buttonBox.setAlignment(Pos.CENTER);
-        layout.add(buttonBox, 0, rowIndex, 3, 1);
+        layout.add(buttonBox, 0, rowIndex, 2, 1);
 
         // Set up event handlers
         submitButton.setOnAction(e -> handleSubmission());
@@ -191,141 +137,101 @@ public class ModifyArticle {
         // Wrap layout in a ScrollPane
         ScrollPane scrollPane = new ScrollPane(layout);
         scrollPane.setFitToWidth(true);
-        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
 
-        Scene scene = new Scene(outerLayer, width, height);
-        scene.getStylesheets().add("file:/C:/Users/Brian/git/CSE360App/src/CSE360App/application.css");
-		layout.getStyleClass().add("root");
-		layout.getStyleClass().add("label-padding");
-		layout.setAlignment(Pos.CENTER);
-		layout.setPadding(new Insets(20));
+        Scene scene = new Scene(scrollPane, 700, 600);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Modify Article");
     }
 
-    /***
-     * addFormField: Creates a form field for normal user inputs
-     * @param layout
-     * @param label
-     * @param comboBox
-     * @param row
-     */
     private void addFormField(GridPane layout, Label label, TextField field, int row) {
         label.setFont(Font.font("Arial", 14));
         layout.add(label, 0, row);
         layout.add(field, 1, row);
     }
 
-    
-    /***
-     * addFormField: Creates a form field for text area user inputs
-     * @param layout
-     * @param label
-     * @param comboBox
-     * @param row
-     */
     private void addFormField(GridPane layout, Label label, TextArea field, int row) {
-    	field.setWrapText(true);
         label.setFont(Font.font("Arial", 14));
+        field.setWrapText(true);
         layout.add(label, 0, row);
         layout.add(field, 1, row);
     }
-    
-    
-    /***
-     * addFormField: Creates a form field for comboboxes  user inputs
-     * @param layout
-     * @param label
-     * @param comboBox
-     * @param row
-     */
+
     private void addFormField(GridPane layout, Label label, ComboBox<String> comboBox, int row) {
         label.setFont(Font.font("Arial", 14));
         layout.add(label, 0, row);
         layout.add(comboBox, 1, row);
     }
-    
-    /***
-     * initalizeTags: If any of the tag boxes have values, intialize them and display them.
-     * @param values
-     * @param tagContainer
-     */
-    private void initializeTags(ArrayList<String> values, FlowPane tagContainer) {
-        for (String value : values) {
-            addTag(value, tagContainer, values, false); // false to skip adding it again in values list
-        }
-    }
 
-    /***
-	addTagField: Helper function to create "tag select" options, where user can save list of words
-     * 		   This one is the collection of tags
-     * @param layout
-     * @param label
-     * @param textField
-     * @param values
-     * @param row
-     */
     private void addTagField(GridPane layout, Label label, TextField textField, ArrayList<String> values, int row) {
         FlowPane tagContainer = new FlowPane();
         tagContainer.setHgap(8);
-        
-
 
         // Populate existing tags
-        initializeTags(values, tagContainer);
+        for (String value : values) {
+            addTag(value, tagContainer, values, false);
+        }
 
         // Add new tags
         textField.setOnAction(event -> {
             String tagText = textField.getText().trim();
             if (!tagText.isEmpty()) {
-                addTag(tagText, tagContainer, values,true);
+                addTag(tagText, tagContainer, values, true);
                 textField.clear();
             }
         });
 
-        label.setFont(Font.font("Arial", 14));
         layout.add(label, 0, row);
         layout.add(textField, 1, row);
         layout.add(tagContainer, 2, row);
     }
 
-    /***
-     * addTag: Helper function to create "tag select" options, where user can save list of words
-     * 		   This one is the individual word, or tag
-     * @param text
-     * @param tagContainer
-     * @param values
-     */
     private void addTag(String text, FlowPane tagContainer, ArrayList<String> values, boolean addToList) {
         HBox tagBox = new HBox(5);
         Text tagText = new Text(text);
-        
-        if(addToList) {
-        values.add(text);
-        }
-        
-        
         Button removeButton = new Button("x");
-        removeButton.setStyle("-fx-background-color: transparent; -fx-text-fill: red;");
         removeButton.setOnAction(e -> {
             tagContainer.getChildren().remove(tagBox);
             values.remove(text);
         });
-
         tagBox.getChildren().addAll(tagText, removeButton);
         tagContainer.getChildren().add(tagBox);
+        if (addToList) values.add(text);
     }
 
-    /***
-     * handleSubmission: Eventually will send and save article in database
-     * As-Is: Just prints statement
-     * NEEDS: Actual logic
-     * 
-     */
     private void handleSubmission() {
-        System.out.println("Submitted!");
-        System.out.printf("Title: %s\nAbstract: %s\nBody: %s\nKeywords: %s\nLinks: %s\n",
-                text_Title.getText(), text_Abstract.getText(), text_Body.getText(),
-                String.join(", ", keywords), String.join(", ", links));
+        try {
+            // Connect to the database
+            DatabaseHelper dbHelper = DatabaseHelper.getInstance();
+            dbHelper.connectToDataBase();
+
+            // Collect keywords and links from their respective lists
+            ArrayList<String> collectedKeywords = new ArrayList<>(keywords);
+            ArrayList<String> collectedLinks = new ArrayList<>(links);
+
+            // Call addArticle to save the article in the database
+            dbHelper.addArticle(
+                List.of("Admin"),                          // Assuming admin role for now
+                text_Title.getText(),                      // Title
+                text_PublicTitle.getText(),                // Public Title
+                text_Author.getText(),                     // Author
+                text_Abstract.getText(),                   // Abstract
+                text_PublicAbstract.getText(),             // Public Abstract
+                text_Body.getText(),                       // Body
+                SkillLevel.valueOf(skillLevelComboBox.getValue().toUpperCase()), // Skill Level
+                text_GroupID.getText(),                    // Group ID
+                AccessLevel.valueOf(accessLevelComboBox.getValue().toUpperCase()), // Access Level
+                new java.util.Date(),                      // Current Date
+                collectedKeywords,                         // Keywords
+                collectedLinks                              // Links
+            );
+
+            // Provide feedback to the user
+            System.out.println("Article submitted successfully!");
+        } catch (Exception e) {
+            // Handle errors during submission
+            System.err.println("Error submitting article: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
+
 }
