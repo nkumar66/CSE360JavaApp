@@ -72,13 +72,13 @@ public class ModifyArticle {
             String publicTitle, String publicAbstract, String groupID, SkillLevel skillLevel, AccessLevel accessLevel) {
 
 // Ensure accessLevel is not null
-if (accessLevel == null) {
-System.err.println("Error: AccessLevel is null. Defaulting to PUBLIC.");
-accessLevel = AccessLevel.PUBLIC; // Default to PUBLIC
-}
+		if (accessLevel == null) {
+			System.err.println("Error: AccessLevel is null. Defaulting to PUBLIC.");
+			accessLevel = AccessLevel.PUBLIC; // Default to PUBLIC
+		}
 
-setupUI(primaryStage, role, title, description, body, oldKeywords, oldLinks, publicTitle, publicAbstract, groupID, skillLevel, accessLevel);
-}
+		setupUI(primaryStage, role, title, description, body, oldKeywords, oldLinks, publicTitle, publicAbstract, groupID, skillLevel, accessLevel);
+	}
 
     private void setupUI(Stage primaryStage, String role, String title, String description, String body,
                          ArrayList<String> initialKeywords, ArrayList<String> initialLinks,
