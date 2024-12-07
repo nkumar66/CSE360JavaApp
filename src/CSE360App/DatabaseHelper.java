@@ -442,7 +442,7 @@ public class DatabaseHelper {
 		String encryptedPassword = Base64.getEncoder().encodeToString(EncryptionHelper.encrypt(password.getBytes(),
 				EncryptionUtils.getInitializationVector(email.toCharArray())));
 		// SQL query
-		String addUserSQL = "INSERT INTO users (user, pass, email, firstName, middleName, lastName, preferredFirstName, isOTP, oneTimePassword, otpExpiration) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String addUserSQL = "INSERT INTO cse360users (`user`, pass, email, firstName, middleName, lastName, preferredFirstName, isOTP, oneTimePassword, otpExpiration) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		try (PreparedStatement pstmt = connection.prepareStatement(addUserSQL)) {
 			pstmt.setString(1, username);
 			pstmt.setString(2, encryptedPassword);
@@ -469,7 +469,7 @@ public class DatabaseHelper {
 	// Checks if user with a certain username exists
 	private boolean doesUserExist(String username) throws SQLException {
 		// SQL query
-		String checkUserSQL = "SELECT COUNT(*) FROM users WHERE user = ?";
+		String checkUserSQL = "SELECT COUNT(*) FROM cse360users WHERE user = ?";
 		try (PreparedStatement pstmt = connection.prepareStatement(checkUserSQL)) {
 			pstmt.setString(1, username);
 			ResultSet rs = pstmt.executeQuery();

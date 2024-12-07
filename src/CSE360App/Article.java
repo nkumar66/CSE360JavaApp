@@ -14,6 +14,9 @@
 package src.CSE360App;
 
 import java.util.ArrayList;
+import java.sql.Statement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 
@@ -411,33 +414,36 @@ public class Article {
 	 * real articles
 	 */
 	public static void populateArticles(ArrayList<Article> articles) {
+        // Clear the existing list of articles
+        articles.clear();
 
-		SkillLevel genericSkill = SkillLevel.BEGINNER;
-		String genericShortDescription = "This is a short description.";
-		String author = "James P. Sullivan";
-		String author2 = "Mike Wazoski";
-		String author3 = "Randall Boggs";
-		ArrayList<String> genericKeywords = new ArrayList<>();
-		genericKeywords.add("Keyword 1");
-		genericKeywords.add("Keyword 2");
-		genericKeywords.add("Keyword 3");
-		ArrayList<String> genericLinks = new ArrayList<>();
-		genericLinks.add("Link 1");
-		genericLinks.add("Link 2");
-		genericLinks.add("Link 3");
+        try {
+            // Get an instance of the DatabaseHelper and connect to the database
+            DatabaseHelper dbHelper = DatabaseHelper.getInstance();
+            dbHelper.connectToDataBase();
 
-		articles.add(new Article("Title 1", genericSkill, genericShortDescription, author, genericKeywords, genericLinks,
-				"This is the content of Article 1."));
-		articles.add(new Article("Title 2", genericSkill, genericShortDescription, author2, genericKeywords, genericLinks,
-				"This is the content of Article 2."));
-		articles.add(new Article("Title 3", genericSkill, genericShortDescription, author3, genericKeywords, genericLinks,
-				"This is the content of Article 3."));
-		articles.add(new Article("Title 4", genericSkill, genericShortDescription, author2, genericKeywords, genericLinks,
-				"This is the content of Article 4."));
-		articles.add(new Article("Title 5", genericSkill, genericShortDescription, author3, genericKeywords, genericLinks,
-				"This is the content of Article 5."));
-		articles.add(new Article("Title 6", genericSkill, genericShortDescription, author, genericKeywords, genericLinks,
-				"This is the content of Article 6."));
-	}
+            // SQL query to fetch all articles
+            String query = "SELECT * FROM cse360articles";
+            Statement stmt = dbHelper.statement;
+            ResultSet rs = stmt.executeQuery(query);
+
+            // Iterate over the ResultSet to create Article objects
+            while (rs.next()) {
+                long id = rs.getLong("id");
+                String title = rs.getString("title");
+                String publicTitle = rs.getString("publicTitle");
+                String author = rs.getString("author");
+                String abstr = rs.getString("abstract");
+                String body = rs.getString("body");
+                SkillLevel skillLevel = SkillLevel.valueOf(rs.getString("skillLevel").toUpperCase());
+
+                // Add each Article to the list
+                articles.add(new Article(id, title, publicTitle, author, abstr, skillLevel, body));
+            }
+        } catch (Exception e) {
+            System.err.println("Error fetching articles from database: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 
 }

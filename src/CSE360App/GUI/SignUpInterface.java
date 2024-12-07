@@ -1,11 +1,15 @@
-
 package src.CSE360App.GUI;
+import src.CSE360App.DatabaseHelper;
+import java.sql.Timestamp;
 
 import src.CSE360App.AdminClass;
 import src.CSE360App.PasswordEvaluationGUITestbed;
 import src.CSE360App.PasswordEvaluator;
 import src.CSE360App.GUI.Admin_Stuff.AdminInterface;
 import src.CSE360App.GUI.Student_Stuff.StudentInterface;
+
+import java.sql.SQLException;
+
 // JavaFX imports needed to support the Graphical User Interface
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -101,6 +105,11 @@ public class SignUpInterface {
 	private Button SignUpButton = new Button("Sign Up");
 	private Label errorMessage = new Label("");
 	private String role;
+	
+	//database connection
+	private DatabaseHelper dbHelper;
+	//create an instance of the database: 
+	
 
 	/**********************************************************************************************
 	 * 
@@ -224,9 +233,15 @@ public class SignUpInterface {
 		validPassword.setAlignment(Pos.BASELINE_RIGHT);
 		setupLabelUI(validPassword, "Arial", 18, PasswordEvaluationGUITestbed.WINDOW_WIDTH - 150 - 10,
 				Pos.BASELINE_LEFT, 10, 380);
+		
+		//database instance initialization: 
+		try {
+			dbHelper = DatabaseHelper.getInstance();
+		} catch (SQLException e) {
+				System.out.println("Instance creation failed");
+		}
 
 		// login button that sets new scene if credentials are valid
-
 		SignUpButton.setLayoutX(900);
 		SignUpButton.setLayoutY(250);
 		SignUpButton.setOnAction(e -> {
@@ -257,6 +272,25 @@ public class SignUpInterface {
 					"", // Last name (you can add this to the form if needed)
 					preferredFirstName // You can add a field for this in the form
 			);
+			//add user to the database
+			Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+			try {
+			dbHelper.addUser(username, password, email, preferredFirstName, "", "", preferredFirstName, false, "", currentTimestamp);
+			} catch (SQLException exception) {
+				System.out.println("Couldn't add user" + exception.getMessage());
+			} catch (Exception ex) {
+				System.out.println("An unexpected error occurred" + ex.getMessage());
+			}
+
+			try {
+				if (dbHelper.isUserDatabaseEmpty() == true) {
+					System.out.println("FAILED TO ADD");
+				} else {
+					System.out.println("SUCCESSFUL ADD");
+				}
+			} catch (SQLException excep) {
+				System.out.println("SQLException error");
+			}
 
 			// Success logic: after completing sign-up, navigate to next screen (login or
 			// app)
@@ -302,6 +336,21 @@ public class SignUpInterface {
 		primaryStage.setTitle("Sign Up");
 	}
 
+	
+	/*private void addNewUserToDatabase() {
+        String username = text_UserName.getText();
+        String password = text_Password.getText();
+
+        // Assuming DatabaseHelper has a method to add users
+        try {
+            dbHelper.addUser(username, password);
+            System.out.println("User added successfully");
+        } catch (SQLException e) {
+            System.out.println("Error adding user: " + e.getMessage());
+        }
+    }
+    */
+	
 	/**********
 	 * Login: Private local method to handle login, and switching to new stage /
 	 * scene. As is: As long as the criteria for the sign up button are met, sends
